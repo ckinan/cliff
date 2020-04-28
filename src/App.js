@@ -12,10 +12,6 @@ function App() {
     setRecords([...records, newRecord]);
   };
 
-  useEffect(() => {
-    console.log("Records updated");
-  }, [records]);
-
   return (
     <div>
       <h1>Cliff</h1>
