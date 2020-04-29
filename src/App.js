@@ -13,32 +13,36 @@ function App() {
   };
 
   return (
-    <div>
-      <h1>Cliff</h1>
-      <div>
-        <button onClick={(e) => handleAddHalf(e, 0.5)}>+ 1/2</button>
-        <button onClick={(e) => handleAddHalf(e, 1)}>+ 1</button>
+    <div className="container mx-auto">
+      <h1 className="text-5xl text-center">Cliff</h1>
+      <div className="text-center">
+        <button
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-4 border-green-600"
+          onClick={(e) => handleAddHalf(e, 0.5)}
+        >
+          1/2
+        </button>
+        <button
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-4 border-green-600"
+          onClick={(e) => handleAddHalf(e, 1)}
+        >
+          1
+        </button>
       </div>
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <td>Count</td>
-              <td>Date</td>
-            </tr>
-          </thead>
-          <tbody>
-            {records.map((record, index) => {
-              return (
-                <tr key={index}>
-                  <td>{record.count}</td>
-                  <td>{record.createdAt.toString()}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      <div className="grid grid-cols-4">
+        <div className="border px-4 py-2 grid">Count</div>
+        <div className="border px-4 py-2 grid col-span-3">Date</div>
       </div>
+      {records.map((record, index) => {
+        return (
+          <div className="grid grid-cols-4" key={index}>
+            <div className="border px-4 py-2 grid">{record.count}</div>
+            <div className="border px-4 py-2 grid col-span-3">
+              {record.createdAt.toString()}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
