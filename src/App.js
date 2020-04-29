@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import moment from "moment";
 
 function App() {
   const [records, setRecords] = useState([]);
@@ -9,7 +10,7 @@ function App() {
       count: value,
       createdAt: new Date(),
     };
-    setRecords([...records, newRecord]);
+    setRecords([newRecord, ...records]);
   };
 
   return (
@@ -30,15 +31,15 @@ function App() {
         </button>
       </div>
       <div className="grid grid-cols-4">
-        <div className="border px-4 py-2 grid">Count</div>
-        <div className="border px-4 py-2 grid col-span-3">Date</div>
+        <div className="border-b px-4 py-2 grid">Count</div>
+        <div className="border-b px-4 py-2 grid col-span-3">Date</div>
       </div>
       {records.map((record, index) => {
         return (
           <div className="grid grid-cols-4" key={index}>
-            <div className="border px-4 py-2 grid">{record.count}</div>
-            <div className="border px-4 py-2 grid col-span-3">
-              {record.createdAt.toString()}
+            <div className="border-b px-4 py-2 grid">{record.count}</div>
+            <div className="border-b px-4 py-2 grid col-span-3">
+              {moment(record.createdAt).format("YYYY-MM-DD HH:mm:ss")}
             </div>
           </div>
         );
