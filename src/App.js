@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 
 function App() {
-  const [records, setRecords] = useState([]);
+  const [records, setRecords] = useState(initialData);
 
   const handleAddHalf = (e, value) => {
     e.preventDefault();
@@ -49,3 +49,38 @@ function App() {
 }
 
 export default App;
+
+const initialData = [
+  {
+    count: 1,
+    createdAt: new Date(),
+  },
+  {
+    count: 1,
+    createdAt: new Date(),
+  },
+  {
+    count: 1,
+    createdAt: new Date(),
+  },
+  {
+    count: 1,
+    createdAt: new Date(),
+  },
+  {
+    count: 1,
+    createdAt: new Date(),
+  },
+  {
+    count: 1,
+    createdAt: new Date(),
+  },
+  {
+    count: 1,
+    createdAt: new Date(),
+  },
+  {
+    count: 1,
+    createdAt: new Date(),
+  },
+];
