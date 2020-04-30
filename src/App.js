@@ -14,7 +14,7 @@ function App() {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="max-w-md mx-auto">
       <h1 className="text-5xl text-center">Cliff</h1>
       <div className="text-center">
         <button
