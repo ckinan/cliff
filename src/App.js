@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import moment from "moment";
+import React, { useState, useEffect } from 'react';
+import moment from 'moment';
 
 function App() {
   const [records, setRecords] = useState(initialData);
@@ -39,7 +39,7 @@ function App() {
           <div className="grid grid-cols-4" key={index}>
             <div className="border-b px-4 py-2 grid">{record.count}</div>
             <div className="border-b px-4 py-2 grid col-span-3">
-              {moment(record.createdAt).format("YYYY-MM-DD HH:mm:ss")}
+              {moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss')}
             </div>
           </div>
         );
