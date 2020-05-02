@@ -71,10 +71,21 @@ const initialData = [
   },
 ];
 
+const handeCheckAuth = async (e) => {
+  e.preventDefault();
+  let response = await fetch(`/api/server/checkauth`).then(function (response) {
+    return response.json();
+  });
+  console.log(response);
+};
+
 function Home() {
   return (
     <div>
       <a href="/api/server/auth/google">Log In with Google</a>
+      <button type="button" onClick={(e) => handeCheckAuth(e)}>
+        Check Auth
+      </button>
     </div>
   );
 }

@@ -19,3 +19,5 @@
 - Express on Netlify Functions: https://www.netlify.com/blog/2018/09/13/how-to-run-express.js-apps-with-netlify-functions/
 - Netlify Functions + passportjs + google strategy: https://medium.com/@svengau/authentication-using-netlify-lambda-and-passportjs-%EF%B8%8F-51bfd80c6c11
 - Netlify Functions + passportjs + github strategy: https://markus.oberlehner.net/blog/implementing-an-authentication-flow-with-passport-and-netlify-functions/
+- http://gregtrowbridge.com/node-authentication-with-google-oauth-part1-sessions/
+- https://medium.com/free-code-camp/how-to-set-up-twitter-oauth-using-passport-js-and-reactjs-9ffa6f49ef0
