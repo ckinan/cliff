@@ -8,6 +8,13 @@ const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
+const redis = require('redis');
+const redisClient = redis.createClient();
+const redisStore = require('connect-redis')(expressSession);
+const REDIS_HOST = process.env.REDIS_HOST;
+const REDIS_PORT = process.env.REDIS_PORT;
+const REDIS_USER = process.env.REDIS_USER;
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
 
 passport.use(
   new GoogleStrategy(
@@ -57,14 +64,27 @@ passport.deserializeUser(async function (obj, cb) {
 
 var app = express();
 app.use(require('morgan')('combined'));
-app.use(cookieParser());
+app.use(cookieParser('keyboard cat'));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+redisClient.on('error', (err) => {
+  console.log('Redis error: ', err);
+});
+
 app.use(
   expressSession({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false },
+    store: new redisStore({
+      host: REDIS_HOST,
+      port: REDIS_PORT,
+      user: REDIS_USER,
+      pass: REDIS_PASSWORD,
+      client: redisClient,
+      ttl: 260,
+    }),
   })
 );
 app.use(passport.initialize());
@@ -99,14 +119,16 @@ app.get(
       `req.session.passport: ${JSON.stringify(req.session.passport)}`
     );
     console.log(`req.user: ${JSON.stringify(req.user)}`);
-    return res.redirect('/');
+
+    res.redirect('/');
   }
 );
 
 const isAuthenticated = function (req, res, next) {
   console.log('------------isAuthenticated-----------');
-  console.log(req.session);
-  console.log(req.sessionID);
+  //console.log(req);
+  //console.log(req.session);
+  //console.log(req.sessionID);
   console.log(req.user);
   console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
@@ -121,6 +143,7 @@ const isAuthenticated = function (req, res, next) {
 app.get('/api/server/checkauth', isAuthenticated, function (req, res) {
   console.log('------------checkauth-----------');
   console.log(req.session.passport);
+  console.log(req.sessionID);
   console.log(req.isAuthenticated());
   res.status(200).json({
     status: 'Login successful!',

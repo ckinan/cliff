@@ -73,7 +73,9 @@ const initialData = [
 
 const handeCheckAuth = async (e) => {
   e.preventDefault();
-  let response = await fetch(`/api/server/checkauth`).then(function (response) {
+  let response = await fetch(`/api/server/checkauth`, {
+    method: 'GET',
+  }).then(function (response) {
     return response.json();
   });
   console.log(response);
