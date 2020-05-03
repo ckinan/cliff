@@ -24,7 +24,7 @@ function App() {
               <Link to="/">Public</Link>
             </li>
             <li>
-              <Link to="/protected">App</Link>
+              <Link to="/app">App</Link>
             </li>
           </ul>
         </nav>
