@@ -3,7 +3,15 @@ var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
-const serverless = require('serverless-http');
+const cors = require('cors');
+
+const dotenv = require('dotenv');
+dotenv.config();
+
+const APP_PORT = process.env.APP_PORT;
+
+console.log(process.env.GOOGLE_CLIENT_ID);
+
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const cookieParser = require('cookie-parser');
@@ -26,7 +34,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: `http://localhost:8888/api/server/auth/google/callback`,
+      callbackURL: `http://localhost:3333/api/server/auth/google/callback`,
     },
     async function (accessToken, refreshToken, profile, cb) {
       const pool = new Pool();
@@ -66,6 +74,14 @@ app.use(cookieParser('keyboard cat'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
+  cors({
+    origin: 'http://localhost:3000', // allow to server to accept request from different origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // allow session cookie from browser to pass through
+  })
+);
+
+app.use(
   expressSession({
     secret: 'keyboard cat',
     resave: false,
@@ -79,9 +95,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/api/server', function (req, res) {
-  res.redirect('/');
-});
+app.get('/', (req, res) => res.send('Hello World!'));
 
 app.get(
   '/api/server/auth/google',
@@ -94,7 +108,7 @@ app.get(
     failureRedirect: '/api/server',
   }),
   function callback(req, res) {
-    res.redirect('/');
+    res.redirect('http://localhost:3000/');
   }
 );
 
@@ -116,8 +130,7 @@ app.get('/api/server/checkauth', isAuthenticated, function (req, res) {
 
 app.get('/api/server/logout', (req, res) => {
   req.logout();
-  res.redirect('/');
+  res.redirect('http://localhost:3000/');
 });
 
-module.exports = app;
-module.exports.handler = serverless(app);
+app.listen(APP_PORT, () => console.log(`Running on port: ${APP_PORT}`));

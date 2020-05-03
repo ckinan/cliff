@@ -3,9 +3,9 @@ import moment from 'moment';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 function App() {
-  useEffect(() => {
+  /*useEffect(() => {
     const checkAuth = async () => {
-      let response = await fetch(`/api/server/checkauth`, {
+      let response = await fetch(`http://localhost:3333/api/server/checkauth`, {
         method: 'GET',
       }).then(function (response) {
         return response.json();
@@ -13,7 +13,7 @@ function App() {
       console.log(response);
     };
     checkAuth();
-  }, []);
+  }, []);*/
 
   return (
     <Router>
@@ -85,8 +85,12 @@ const initialData = [
 
 const handeCheckAuth = async (e) => {
   e.preventDefault();
-  let response = await fetch(`/api/server/checkauth`, {
+  let response = await fetch(`http://localhost:3333/api/server/checkauth`, {
     method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Access-Control-Allow-Credentials': true,
+    },
   }).then(function (response) {
     return response.json();
   });
@@ -95,8 +99,12 @@ const handeCheckAuth = async (e) => {
 
 const handeLogout = async (e) => {
   e.preventDefault();
-  let response = await fetch(`/api/server/logout`, {
+  let response = await fetch(`http://localhost:3333/api/server/logout`, {
     method: 'GET',
+    credentials: 'include',
+    headers: {
+      'Access-Control-Allow-Credentials': true,
+    },
   }).then(function (response) {
     return response.json();
   });
@@ -106,7 +114,9 @@ const handeLogout = async (e) => {
 function Public() {
   return (
     <div>
-      <a href="/api/server/auth/google">Log In with Google</a>
+      <a href="http://localhost:3333/api/server/auth/google">
+        Log In with Google
+      </a>
       <button type="button" onClick={(e) => handeCheckAuth(e)}>
         Check Auth
       </button>
