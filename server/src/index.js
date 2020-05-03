@@ -95,7 +95,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req, res) => res.send('Hello World!'));
+app.get('/', (req, res) => res.send('Hello World!2'));
 
 app.get(
   '/api/server/auth/google',
