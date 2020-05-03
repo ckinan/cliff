@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 function App() {
+  useEffect(() => {
+    const checkAuth = async () => {
+      let response = await fetch(`/api/server/checkauth`, {
+        method: 'GET',
+      }).then(function (response) {
+        return response.json();
+      });
+      console.log(response);
+    };
+    checkAuth();
+  }, []);
+
   return (
     <Router>
       <div>
         <nav>
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <Link to="/">Public</Link>
             </li>
             <li>
               <Link to="/protected">App</Link>
@@ -21,11 +33,11 @@ function App() {
             renders the first one that matches the current URL. */}
         <div className="bg-red-600">
           <Switch>
-            <Route path="/protected">
+            <Route path="/app">
               <Protected />
             </Route>
             <Route path="/">
-              <Home />
+              <Public />
             </Route>
           </Switch>
         </div>
@@ -91,7 +103,7 @@ const handeLogout = async (e) => {
   console.log(response);
 };
 
-function Home() {
+function Public() {
   return (
     <div>
       <a href="/api/server/auth/google">Log In with Google</a>
