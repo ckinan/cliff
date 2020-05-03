@@ -82,7 +82,6 @@ app.use(
     store: new redisStore({
       host: REDIS_HOST,
       port: REDIS_PORT,
-      user: REDIS_USER,
       pass: REDIS_PASSWORD,
       client: redisClient,
     }),
