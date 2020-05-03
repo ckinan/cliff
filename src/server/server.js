@@ -9,12 +9,18 @@ const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const redis = require('redis');
-const redisClient = redis.createClient();
-const redisStore = require('connect-redis')(expressSession);
+
 const REDIS_HOST = process.env.REDIS_HOST;
 const REDIS_PORT = process.env.REDIS_PORT;
 const REDIS_USER = process.env.REDIS_USER;
 const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
+
+let redisStore = require('connect-redis')(expressSession);
+let redisClient = redis.createClient({
+  host: REDIS_HOST,
+  port: REDIS_PORT,
+  password: REDIS_PASSWORD,
+});
 
 passport.use(
   new GoogleStrategy(
@@ -67,10 +73,6 @@ app.use(require('morgan')('combined'));
 app.use(cookieParser('keyboard cat'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-redisClient.on('error', (err) => {
-  console.log('Redis error: ', err);
-});
-
 app.use(
   expressSession({
     secret: 'keyboard cat',
@@ -83,7 +85,6 @@ app.use(
       user: REDIS_USER,
       pass: REDIS_PASSWORD,
       client: redisClient,
-      ttl: 260,
     }),
   })
 );
