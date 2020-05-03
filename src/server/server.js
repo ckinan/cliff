@@ -1,13 +1,13 @@
 const express = require('express');
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth20').Strategy;
-const cors = require('cors');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const serverless = require('serverless-http');
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const cookieParser = require('cookie-parser');
+const expressSession = require('express-session');
 
 passport.use(
   new GoogleStrategy(
@@ -60,7 +60,7 @@ app.use(require('morgan')('combined'));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
-  require('express-session')({
+  expressSession({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
