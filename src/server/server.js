@@ -12,7 +12,6 @@ const redis = require('redis');
 
 const REDIS_HOST = process.env.REDIS_HOST;
 const REDIS_PORT = process.env.REDIS_PORT;
-const REDIS_USER = process.env.REDIS_USER;
 const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
 
 let redisStore = require('connect-redis')(expressSession);
@@ -28,11 +27,8 @@ passport.use(
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
       callbackURL: `http://localhost:8888/api/server/auth/google/callback`,
-      passReqToCallback: true,
     },
-    async function (req, accessToken, refreshToken, profile, cb) {
-      //console.log('------------strategy-----------');
-      //console.log(profile);
+    async function (accessToken, refreshToken, profile, cb) {
       const pool = new Pool();
       let account;
       account = await pool.query(
@@ -52,14 +48,10 @@ passport.use(
 );
 
 passport.serializeUser(function (user, cb) {
-  console.log('---------serializeUser---------');
-  console.log(user.id);
   cb(null, user.id);
 });
 
 passport.deserializeUser(async function (obj, cb) {
-  console.log('---------deserializeUser---------');
-  console.log(obj);
   const pool = new Pool();
   const account = await pool.query('SELECT * FROM account WHERE id = $1', [
     obj,
@@ -80,9 +72,6 @@ app.use(
     saveUninitialized: false,
     cookie: { secure: false },
     store: new redisStore({
-      host: REDIS_HOST,
-      port: REDIS_PORT,
-      pass: REDIS_PASSWORD,
       client: redisClient,
     }),
   })
@@ -90,10 +79,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Define routes
 app.get('/api/server', function (req, res) {
-  //console.log('------------home-----------');
-  //console.log(req.user);
   res.redirect('/');
 });
 
@@ -108,47 +94,25 @@ app.get(
     failureRedirect: '/api/server',
   }),
   function callback(req, res) {
-    console.log('------------callback-----------');
-    //console.log(req.user);
-    console.info(`login user ${req.user && req.user.id} and redirect`);
-    console.log('wooo we authenticated, here is our user object:', req.user);
-    console.log(req.isAuthenticated());
-    console.log(req.session);
-    console.log('Inside req.login() callback');
-    console.log(
-      `req.session.passport: ${JSON.stringify(req.session.passport)}`
-    );
-    console.log(`req.user: ${JSON.stringify(req.user)}`);
-
     res.redirect('/');
   }
 );
 
 const isAuthenticated = function (req, res, next) {
-  console.log('------------isAuthenticated-----------');
-  //console.log(req);
-  //console.log(req.session);
-  //console.log(req.sessionID);
-  console.log(req.user);
-  console.log(req.isAuthenticated());
   if (req.isAuthenticated()) {
     next();
   } else {
     res.status(403).json({
-      message: 'must be logged in to continue',
+      message: 'not authenticated',
     });
   }
 };
 
 app.get('/api/server/checkauth', isAuthenticated, function (req, res) {
-  console.log('------------checkauth-----------');
-  console.log(req.session.passport);
-  console.log(req.sessionID);
-  console.log(req.isAuthenticated());
   res.status(200).json({
     status: 'Login successful!',
   });
 });
 
-//module.exports = app;
+module.exports = app;
 module.exports.handler = serverless(app);
