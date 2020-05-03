@@ -114,5 +114,10 @@ app.get('/api/server/checkauth', isAuthenticated, function (req, res) {
   });
 });
 
+app.get('/api/server/logout', (req, res) => {
+  req.logout();
+  res.redirect('/');
+});
+
 module.exports = app;
 module.exports.handler = serverless(app);
