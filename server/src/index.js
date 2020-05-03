@@ -75,7 +75,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
   cors({
-    origin: 'http://localhost:3000', // allow to server to accept request from different origin
+    origin: /localhost:3000.*/, // allow to server to accept request from different origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // allow session cookie from browser to pass through
   })
@@ -117,20 +117,22 @@ const isAuthenticated = function (req, res, next) {
     next();
   } else {
     res.status(403).json({
-      message: 'not authenticated',
+      isAuthenticated: false,
     });
   }
 };
 
 app.get('/api/server/checkauth', isAuthenticated, function (req, res) {
   res.status(200).json({
-    status: 'Login successful!',
+    isAuthenticated: true,
   });
 });
 
 app.get('/api/server/logout', (req, res) => {
   req.logout();
-  res.redirect('http://localhost:3000/');
+  res.status(200).json({
+    isAuthenticated: false,
+  });
 });
 
 app.listen(APP_PORT, () => console.log(`Running on port: ${APP_PORT}`));
