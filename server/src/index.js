@@ -1,29 +1,25 @@
-const express = require('express');
-var passport = require('passport');
-var GoogleStrategy = require('passport-google-oauth20').Strategy;
-const bodyParser = require('body-parser');
-const { Pool } = require('pg');
-const cors = require('cors');
-
+// Environment variables
 const dotenv = require('dotenv');
 dotenv.config();
-
 const APP_PORT = process.env.APP_PORT;
-
-console.log(process.env.GOOGLE_CLIENT_ID);
-
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const cookieParser = require('cookie-parser');
-const expressSession = require('express-session');
-const redis = require('redis');
-
 const REDIS_HOST = process.env.REDIS_HOST;
 const REDIS_PORT = process.env.REDIS_PORT;
 const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
 
-let redisStore = require('connect-redis')(expressSession);
-let redisClient = redis.createClient({
+// App
+const express = require('express');
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const bodyParser = require('body-parser');
+const { Pool } = require('pg');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const expressSession = require('express-session');
+const redis = require('redis');
+const redisStore = require('connect-redis')(expressSession);
+const redisClient = redis.createClient({
   host: REDIS_HOST,
   port: REDIS_PORT,
   password: REDIS_PASSWORD,
