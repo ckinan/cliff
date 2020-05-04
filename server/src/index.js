@@ -67,11 +67,11 @@ passport.deserializeUser(async function (obj, cb) {
 var app = express();
 app.use(require('morgan')('combined'));
 app.use(cookieParser('keyboard cat'));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(
   cors({
-    origin: /localhost:3000.*/, // allow to server to accept request from different origin
+    origin: /localhost:5000.*/, // allow to server to accept request from different origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // allow session cookie from browser to pass through
   })
@@ -104,7 +104,7 @@ app.get(
     failureRedirect: '/api/server',
   }),
   function callback(req, res) {
-    res.redirect('http://localhost:3000/');
+    res.redirect('http://localhost:5000/');
   }
 );
 
@@ -121,6 +121,27 @@ const isAuthenticated = function (req, res, next) {
 app.get('/api/server/checkauth', isAuthenticated, function (req, res) {
   res.status(200).json({
     isAuthenticated: true,
+  });
+});
+
+app.get('/api/server/tracks', isAuthenticated, async function (req, res) {
+  const pool = new Pool();
+  let tracks = await pool.query('SELECT * FROM track order by id desc');
+  await pool.end();
+  res.status(200).json({
+    tracks: tracks.rows,
+  });
+});
+
+app.post('/api/server/track', isAuthenticated, async function (req, res) {
+  const pool = new Pool();
+  await pool.query('INSERT INTO track (counter) VALUES ($1)', [
+    req.body.counter,
+  ]);
+  await pool.end();
+
+  res.status(200).json({
+    status: true,
   });
 });
 

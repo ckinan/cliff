@@ -13,7 +13,6 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    console.log('App.useEffect');
     fetch(`http://localhost:3333/api/server/checkauth`, {
       method: 'GET',
       credentials: 'include',
@@ -25,7 +24,6 @@ function App() {
         return response.json();
       })
       .then(function (json) {
-        console.log(json.isAuthenticated);
         setIsAuthenticated(json.isAuthenticated);
       });
   }, []);
@@ -44,7 +42,7 @@ function App() {
         isAuthenticated={isAuthenticated}
         setIsAuthenticated={setIsAuthenticated}
       />
-      <div className="bg-red-600">
+      <div>
         <Switch>
           <Route path="/app">
             <Protected
@@ -62,41 +60,6 @@ function App() {
 }
 
 export default App;
-
-const initialData = [
-  {
-    count: 1,
-    createdAt: new Date(),
-  },
-  {
-    count: 1,
-    createdAt: new Date(),
-  },
-  {
-    count: 1,
-    createdAt: new Date(),
-  },
-  {
-    count: 1,
-    createdAt: new Date(),
-  },
-  {
-    count: 1,
-    createdAt: new Date(),
-  },
-  {
-    count: 1,
-    createdAt: new Date(),
-  },
-  {
-    count: 1,
-    createdAt: new Date(),
-  },
-  {
-    count: 1,
-    createdAt: new Date(),
-  },
-];
 
 function Public() {
   return <div>Hi! I am public!</div>;
@@ -116,7 +79,6 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
         return response.json();
       })
       .then(function (json) {
-        console.log(json.isAuthenticated);
         setIsAuthenticated(json.isAuthenticated);
       });
   };
@@ -141,19 +103,51 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
 }
 
 function Protected({ isAuthenticated, setIsAuthenticated }) {
-  const [records, setRecords] = useState(initialData);
+  const [records, setRecords] = useState([]);
+
+  const fetchTracks = () => {
+    fetch(`http://localhost:3333/api/server/tracks`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Credentials': true,
+      },
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+        setRecords(json.tracks);
+      });
+  };
 
   useEffect(() => {
-    console.log('Protected.useEffect');
-  }, []);
+    if (isAuthenticated === true) {
+      fetchTracks();
+    }
+  }, [isAuthenticated]);
 
-  const handleAddHalf = (e, value) => {
+  const handleAdd = (e, value) => {
     e.preventDefault();
     const newRecord = {
-      count: value,
-      createdAt: new Date(),
+      counter: value,
     };
-    setRecords([newRecord, ...records]);
+
+    fetch(`http://localhost:3333/api/server/track`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Access-Control-Allow-Credentials': true,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newRecord),
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+        fetchTracks();
+      });
   };
   return (
     <div>
@@ -163,13 +157,13 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
           <div className="text-center">
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-4 border-green-600"
-              onClick={(e) => handleAddHalf(e, 0.5)}
+              onClick={(e) => handleAdd(e, 0.5)}
             >
               1/2
             </button>
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-4 border-green-600"
-              onClick={(e) => handleAddHalf(e, 1)}
+              onClick={(e) => handleAdd(e, 1)}
             >
               1
             </button>
@@ -181,9 +175,11 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
           {records.map((record, index) => {
             return (
               <div className="grid grid-cols-4" key={index}>
-                <div className="border-b px-4 py-2 grid">{record.count}</div>
+                <div className="border-b px-4 py-2 grid">{record.counter}</div>
                 <div className="border-b px-4 py-2 grid col-span-3">
-                  {moment(record.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+                  {moment(record.createdat)
+                    .local()
+                    .format('YYYY-MM-DD HH:mm:ss')}
                 </div>
               </div>
             );
