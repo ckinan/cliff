@@ -18,7 +18,7 @@ services:
     container_name: cliff-redis-container
     ports:
       - '6380:6379'
-    command: 'redis-server --requirepass ${REDIS_PASSWORD}'
+    command: 'redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes'
     volumes:
       - ./volumes/redis:/data
   client:
