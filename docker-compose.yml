@@ -1,6 +1,26 @@
 version: '3.7'
 
 services:
+  postgres:
+    container_name: cliff-postgres-container
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /data/postgres
+      POSTGRES_DB: cliff
+    volumes:
+      - ./volumes/postgres:/data/postgres
+    ports:
+      - '5433:5432'
+  redis:
+    image: redis
+    container_name: cliff-redis-container
+    ports:
+      - '6380:6379'
+    command: 'redis-server --requirepass ${REDIS_PASSWORD}'
+    volumes:
+      - ./volumes/redis:/data
   client:
     container_name: cliff-client-container
     build:
@@ -27,3 +47,6 @@ services:
       - CHOKIDAR_USEPOLLING=true
     stdin_open: true
     tty: true
+    depends_on:
+      - redis
+      - postgres
