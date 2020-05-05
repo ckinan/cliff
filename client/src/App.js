@@ -13,7 +13,7 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    fetch(`http://localhost:3333/api/server/checkauth`, {
+    fetch(`${process.env.REACT_APP_SERVER_HOST}/api/server/checkauth`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -68,7 +68,7 @@ function Public() {
 function Header({ isAuthenticated, setIsAuthenticated }) {
   const handeLogout = async (e) => {
     e.preventDefault();
-    fetch(`http://localhost:3333/api/server/logout`, {
+    fetch(`${process.env.REACT_APP_SERVER_HOST}/api/server/logout`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -92,7 +92,9 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
               Logout
             </button>
           ) : (
-            <a href="http://localhost:3333/api/server/auth/google">
+            <a
+              href={`${process.env.REACT_APP_SERVER_HOST}/api/server/auth/google`}
+            >
               Log In with Google
             </a>
           )}
@@ -106,7 +108,7 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
   const [records, setRecords] = useState([]);
 
   const fetchTracks = () => {
-    fetch(`http://localhost:3333/api/server/tracks`, {
+    fetch(`${process.env.REACT_APP_SERVER_HOST}/api/server/tracks`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -133,7 +135,7 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
       counter: value,
     };
 
-    fetch(`http://localhost:3333/api/server/track`, {
+    fetch(`${process.env.REACT_APP_SERVER_HOST}/api/server/track`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -186,7 +188,7 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
           })}
         </div>
       ) : (
-        <a href="http://localhost:3333/api/server/auth/google">
+        <a href={`${process.env.REACT_APP_SERVER_HOST}/api/server/auth/google`}>
           Not authenticated
         </a>
       )}

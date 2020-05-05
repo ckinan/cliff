@@ -30,7 +30,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: `http://localhost:3333/api/server/auth/google/callback`,
+      callbackURL: `${process.env.SERVER_HOST}/api/server/auth/google/callback`,
     },
     async function (accessToken, refreshToken, profile, cb) {
       const pool = new Pool();
@@ -91,7 +91,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get('/', (req, res) => res.send('Hello World!2'));
+app.get('/hc', (req, res) => res.send('Server is up and running!'));
 
 app.get(
   '/api/server/auth/google',
