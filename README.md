@@ -30,4 +30,5 @@ redis-cli -u redis://username:password@host:port
 
 ```bash
 docker-compose up
+docker-compose -f docker-compose-prod.yml up
 ```
