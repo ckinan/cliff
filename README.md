@@ -25,3 +25,9 @@
 - https://github.com/dougmoscrop/serverless-http/issues/41
 
 redis-cli -u redis://username:password@host:port
+
+## Docker
+
+```bash
+docker-compose up
+```
