@@ -66,6 +66,9 @@ function Public() {
 }
 
 function Header({ isAuthenticated, setIsAuthenticated }) {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
   const handeLogout = async (e) => {
     e.preventDefault();
     fetch(`${process.env.REACT_APP_SERVER_HOST}/api/server/logout`, {
@@ -74,6 +77,28 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
       headers: {
         'Access-Control-Allow-Credentials': true,
       },
+    })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (json) {
+        setIsAuthenticated(json.isAuthenticated);
+      });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch(`${process.env.REACT_APP_SERVER_HOST}/login`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Credentials': true,
+      },
+      body: JSON.stringify({
+        username: username,
+        password: password,
+      }),
     })
       .then(function (response) {
         return response.json();
@@ -92,11 +117,31 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
               Logout
             </button>
           ) : (
-            <a
-              href={`${process.env.REACT_APP_SERVER_HOST}/api/server/auth/google`}
-            >
-              Log In with Google
-            </a>
+            <form onSubmit={(e) => handleSubmit(e)}>
+              <div>
+                <label>Username:</label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
+                <br />
+              </div>
+              <div>
+                <label>Password:</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <br />
+              </div>
+              <div>
+                <button type="submit" value="Submit">
+                  Login
+                </button>
+              </div>
+            </form>
           )}
         </li>
       </ul>
@@ -188,9 +233,7 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
           })}
         </div>
       ) : (
-        <a href={`${process.env.REACT_APP_SERVER_HOST}/api/server/auth/google`}>
-          Not authenticated
-        </a>
+        <a href={`${process.env.REACT_APP_SERVER_HOST}`}>Not authenticated</a>
       )}
     </div>
   );

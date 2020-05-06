@@ -2,16 +2,14 @@
 const dotenv = require('dotenv');
 dotenv.config();
 const APP_PORT = process.env.APP_PORT;
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 const REDIS_HOST = process.env.REDIS_HOST;
 const REDIS_PORT = process.env.REDIS_PORT;
 const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
+const LocalStrategy = require('passport-local').Strategy;
 
 // App
 const express = require('express');
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 const cors = require('cors');
@@ -24,27 +22,30 @@ const redisClient = redis.createClient({
   port: REDIS_PORT,
   password: REDIS_PASSWORD,
 });
+const bcrypt = require('bcrypt');
 
 passport.use(
-  new GoogleStrategy(
+  new LocalStrategy(
     {
-      clientID: GOOGLE_CLIENT_ID,
-      clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: `${process.env.SERVER_HOST}/api/server/auth/google/callback`,
+      // by default, local strategy uses username and password, we will override with email
+      usernameField: 'username',
+      passwordField: 'password',
+      // passReqToCallback: true, // allows us to pass back the entire request to the callback
     },
-    async function (accessToken, refreshToken, profile, cb) {
+    async function (username, password, cb) {
       const pool = new Pool();
       let account;
-      account = await pool.query(
-        'SELECT * FROM account WHERE provider_id = $1 AND provider_type = $2',
-        [profile.id, 'google']
-      );
+      account = await pool.query('SELECT * FROM account WHERE username = $1', [
+        username,
+      ]);
       if (account.rows == 0) {
-        account = await pool.query(
-          'INSERT INTO account (provider_id, provider_type) VALUES ($1, $2) RETURNING *',
-          [profile.id, 'google']
-        );
+        return cb(null, false);
       }
+
+      if (!bcrypt.compareSync(password, account.rows[0].password)) {
+        return cb(null, false);
+      }
+
       await pool.end();
       return cb(null, account.rows[0]);
     }
@@ -68,11 +69,10 @@ var app = express();
 app.use(require('morgan')('combined'));
 app.use(cookieParser('keyboard cat'));
 app.use(bodyParser.json());
-
 app.use(
   cors({
-    origin: /localhost:5000.*/, // allow to server to accept request from different origin
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    origin: 'http://localhost:5000', // allow to server to accept request from different origin
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true, // allow session cookie from browser to pass through
   })
 );
@@ -93,18 +93,13 @@ app.use(passport.session());
 
 app.get('/hc', (req, res) => res.send('Server is up and running!'));
 
-app.get(
-  '/api/server/auth/google',
-  passport.authenticate('google', { scope: ['profile'] })
-);
-
-app.get(
-  '/api/server/auth/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: '/api/server',
-  }),
-  function callback(req, res) {
-    res.redirect('http://localhost:5000/');
+app.post(
+  '/login',
+  passport.authenticate('local', { failureRedirect: 'http://localhost:5000/' }),
+  function (req, res) {
+    res.status(200).json({
+      isAuthenticated: true,
+    });
   }
 );
 
