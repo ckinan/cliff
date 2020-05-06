@@ -27,7 +27,8 @@ services:
       context: ./client
       dockerfile: Dockerfile
     volumes:
-      - './client:/opt/client'
+      - ./client:/opt/app
+      - /opt/app/node_modules
     ports:
       - 5000:3000
     environment:
@@ -41,7 +42,8 @@ services:
       context: ./server
       dockerfile: Dockerfile
     volumes:
-      - './server:/opt/server'
+      - ./server:/opt/app
+      - /opt/app/node_modules
     ports:
       - 3333:3333
     depends_on:
