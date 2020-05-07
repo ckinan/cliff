@@ -1,10 +1,11 @@
 // Environment variables
 const dotenv = require('dotenv');
 dotenv.config();
-const APP_PORT = process.env.APP_PORT;
+const SERVER_PORT = process.env.SERVER_PORT;
 const REDIS_HOST = process.env.REDIS_HOST;
 const REDIS_PORT = process.env.REDIS_PORT;
 const REDIS_PASSWORD = process.env.REDIS_PASSWORD;
+const CLIENT_URL = process.env.CLIENT_URL;
 const LocalStrategy = require('passport-local').Strategy;
 
 // App
@@ -71,7 +72,7 @@ app.use(cookieParser('keyboard cat'));
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: 'http://localhost:5000', // allow to server to accept request from different origin
+    origin: CLIENT_URL, // allow to server to accept request from different origin
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true, // allow session cookie from browser to pass through
   })
@@ -95,7 +96,7 @@ app.get('/hc', (req, res) => res.send('Server is up and running!'));
 
 app.post(
   '/login',
-  passport.authenticate('local', { failureRedirect: 'http://localhost:5000/' }),
+  passport.authenticate('local', { failureRedirect: CLIENT_URL }),
   function (req, res) {
     res.status(200).json({
       isAuthenticated: true,
@@ -147,4 +148,4 @@ app.get('/api/server/logout', (req, res) => {
   });
 });
 
-app.listen(APP_PORT, () => console.log(`Running on port: ${APP_PORT}`));
+app.listen(SERVER_PORT, () => console.log(`Running on port: ${SERVER_PORT}`));
