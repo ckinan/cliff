@@ -1,6 +1,4 @@
 // Environment variables
-const dotenv = require('dotenv');
-dotenv.config();
 const SERVER_PORT = process.env.SERVER_PORT;
 const REDIS_HOST = process.env.REDIS_HOST;
 const REDIS_PORT = process.env.REDIS_PORT;
@@ -12,7 +10,6 @@ const LocalStrategy = require('passport-local').Strategy;
 const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
-const { Pool } = require('pg');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
@@ -25,45 +22,31 @@ const redisClient = redis.createClient({
 });
 const bcrypt = require('bcrypt');
 
+// App Modules
+const CliffDb = require('./cliffDb');
+
 passport.use(
   new LocalStrategy(
     {
-      // by default, local strategy uses username and password, we will override with email
       usernameField: 'username',
       passwordField: 'password',
-      // passReqToCallback: true, // allows us to pass back the entire request to the callback
     },
     async function (username, password, cb) {
-      const pool = new Pool();
-      let account;
-      account = await pool.query('SELECT * FROM account WHERE username = $1', [
-        username,
-      ]);
-      if (account.rows == 0) {
+      const account = await CliffDb.findAccountByUsername(username);
+      if (!account || !bcrypt.compareSync(password, account.password)) {
         return cb(null, false);
       }
-
-      if (!bcrypt.compareSync(password, account.rows[0].password)) {
-        return cb(null, false);
-      }
-
-      await pool.end();
-      return cb(null, account.rows[0]);
+      return cb(null, account);
     }
   )
 );
 
-passport.serializeUser(function (user, cb) {
-  cb(null, user.id);
+passport.serializeUser(function (account, cb) {
+  cb(null, account.id);
 });
 
-passport.deserializeUser(async function (obj, cb) {
-  const pool = new Pool();
-  const account = await pool.query('SELECT * FROM account WHERE id = $1', [
-    obj,
-  ]);
-  await pool.end();
-  cb(null, account.rows[0]);
+passport.deserializeUser(async function (id, cb) {
+  cb(null, await CliffDb.findAccountById(id));
 });
 
 var app = express();
@@ -121,21 +104,13 @@ app.get('/api/server/checkauth', isAuthenticated, function (req, res) {
 });
 
 app.get('/api/server/tracks', isAuthenticated, async function (req, res) {
-  const pool = new Pool();
-  let tracks = await pool.query('SELECT * FROM track order by id desc');
-  await pool.end();
   res.status(200).json({
-    tracks: tracks.rows,
+    tracks: await CliffDb.findAllTracks(),
   });
 });
 
 app.post('/api/server/track', isAuthenticated, async function (req, res) {
-  const pool = new Pool();
-  await pool.query('INSERT INTO track (counter) VALUES ($1)', [
-    req.body.counter,
-  ]);
-  await pool.end();
-
+  await CliffDb.saveTrack(req.body.counter);
   res.status(200).json({
     status: true,
   });
