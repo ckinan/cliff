@@ -23,6 +23,7 @@
 - https://medium.com/free-code-camp/how-to-set-up-twitter-oauth-using-passport-js-and-reactjs-9ffa6f49ef0
 - https://github.com/jaredhanson/passport/issues/244
 - https://github.com/dougmoscrop/serverless-http/issues/41
+- https://github.com/moribvndvs/passport-examples/blob/master/example-simple/passport.js
 
 redis-cli -u redis://username:password@host:port
 
