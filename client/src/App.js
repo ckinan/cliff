@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  useHistory,
-} from 'react-router-dom';
+import { Switch, Route, useHistory } from 'react-router-dom';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -202,6 +196,12 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
         <div className="max-w-md mx-auto">
           <h1 className="text-5xl text-center">Cliff</h1>
           <div className="text-center">
+            <button
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-4 border-green-600"
+              onClick={(e) => handleAdd(e, 0.33)}
+            >
+              1/3
+            </button>
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-4 border-green-600"
               onClick={(e) => handleAdd(e, 0.5)}
