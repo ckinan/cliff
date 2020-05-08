@@ -1,6 +1,22 @@
-version: '3.3'
+version: '2'
 
 services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - '/etc/nginx/vhost.d'
+      - '/usr/share/nginx/html'
+      - '/var/run/docker.sock:/tmp/docker.sock:ro'
+      - '/etc/nginx/certs'
+  letsencrypt-nginx-proxy-companion:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+    volumes_from:
+      - 'nginx-proxy'
   postgres-prod:
     container_name: cliff-postgres-container-prod
     image: postgres
@@ -35,6 +51,10 @@ services:
       - 7000:80
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - VIRTUAL_PORT=${VIRTUAL_PORT}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
     stdin_open: true
     tty: true
   server-prod:
@@ -63,3 +83,7 @@ services:
       - SERVER_URL=${SERVER_URL}
       - CLIENT_URL=${CLIENT_URL_PROD}
       - SESSION_SECRET=${SESSION_SECRET}
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - VIRTUAL_PORT=${VIRTUAL_PORT}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL}
