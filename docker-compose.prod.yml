@@ -1,0 +1,65 @@
+version: '3.7'
+
+services:
+  postgres-prod:
+    container_name: cliff-postgres-container-prod
+    image: postgres
+    environment:
+      POSTGRES_USER: ${PGUSER}
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+      PGDATA: /data/postgres
+      POSTGRES_DB: cliff
+    volumes:
+      - ./volumes/postgres:/data/postgres
+    ports:
+      - '5433:5432'
+  redis-prod:
+    image: redis
+    container_name: cliff-redis-container-prod
+    ports:
+      - '6380:6379'
+    command: 'redis-server --requirepass ${REDIS_PASSWORD} --appendonly yes'
+    volumes:
+      - ./volumes/redis:/data
+  client-prod:
+    container_name: cliff-client-container-prod
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+      args:
+        - REACT_APP_SERVER_URL=${SERVER_URL_PROD}
+    volumes:
+      - ./client:/opt/app
+      - /opt/app/node_modules
+    ports:
+      - 7000:80
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true
+    tty: true
+  server-prod:
+    container_name: cliff-server-container-prod
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    volumes:
+      - ./server:/opt/app
+      - /opt/app/node_modules
+    ports:
+      - 7001:7001
+    depends_on:
+      - redis-prod
+      - postgres-prod
+    environment:
+      - PGUSER=${PGUSER}
+      - PGHOST=${PGHOST_PROD}
+      - PGPASSWORD=${PGPASSWORD}
+      - PGDATABASE=${PGDATABASE}
+      - PGPORT=${PGPORT}
+      - REDIS_HOST=${REDIS_HOST_PROD}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - SERVER_PORT=${SERVER_PORT_PROD}
+      - SERVER_URL=${SERVER_URL}
+      - CLIENT_URL=${CLIENT_URL_PROD}
+      - SESSION_SECRET=${SESSION_SECRET}

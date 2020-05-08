@@ -31,5 +31,10 @@ redis-cli -u redis://username:password@host:port
 
 ```bash
 docker-compose up
-docker-compose -f docker-compose-prod.yml up
+docker-compose -f docker-compose.prod.yml up
+docker-compose -f docker-compose.prod.yml up --build
+docker-compose -f docker-compose.prod.yml down
 ```
+
+- https://mherman.org/blog/dockerizing-a-react-app/
+- Environment variables: https://stackoverflow.com/questions/52103155/reading-an-environment-variable-in-react-which-was-set-by-docker
