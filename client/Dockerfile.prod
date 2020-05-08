@@ -8,7 +8,6 @@ RUN npm install react-scripts@3.4.1 -g --silent
 COPY . ./
 ARG REACT_APP_SERVER_URL
 ENV REACT_APP_SERVER_URL=$REACT_APP_SERVER_URL
-RUN echo "-->"$REACT_APP_SERVER_URL
 RUN npm run build
 
 FROM nginx:alpine
