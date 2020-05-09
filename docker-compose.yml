@@ -62,4 +62,3 @@ services:
       - SERVER_URL=${SERVER_URL}
       - CLIENT_URL=${CLIENT_URL}
       - SESSION_SECRET=${SESSION_SECRET}
-      - NODE_ENV=development

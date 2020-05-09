@@ -15,8 +15,6 @@ const redisClient = redis.createClient({
 });
 const bcrypt = require('bcrypt');
 const CliffDb = require('./cliffDb');
-const isDevelopment = process.env.NODE_ENV === 'development';
-console.log(`isDevelopment: ${isDevelopment}`);
 
 module.exports = (app) => {
   app.use(cookieParser(SESSION_SECRET));
@@ -26,7 +24,6 @@ module.exports = (app) => {
       resave: false,
       saveUninitialized: false,
       cookie: {
-        secure: !isDevelopment,
         expires: new Date(Date.now() + 30 * 86400 * 1000),
       },
       store: new redisStore({
