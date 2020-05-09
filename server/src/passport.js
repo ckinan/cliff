@@ -25,7 +25,13 @@ module.exports = (app) => {
       secret: SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
-      cookie: { secure: !isDevelopment },
+      cookie: {
+        secure: !isDevelopment,
+        cookie: {
+          secure: !isDevelopment,
+          expires: new Date(Date.now() + 30 * 86400 * 1000),
+        },
+      },
       store: new redisStore({
         client: redisClient,
       }),
