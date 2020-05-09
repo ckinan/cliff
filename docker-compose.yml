@@ -62,3 +62,17 @@ services:
       - SERVER_URL=${SERVER_URL}
       - CLIENT_URL=${CLIENT_URL}
       - SESSION_SECRET=${SESSION_SECRET}
+  server-py:
+    container_name: cliff-server-py-container
+    command: ./web.sh
+    build:
+      context: ./server-py
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+      - '5000:5000'
+    volumes:
+      - ./server-py:/opt/app
+    environment:
+      - FLASK_DEBUG=1
+      - FLASK_APP=server.py
