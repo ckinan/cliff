@@ -19,3 +19,5 @@ chmod +x web-dev.sh
 - https://stackoverflow.com/questions/54106071/how-to-setup-virtual-environment-for-python-in-vs-code
 
 https://toutiao.io/posts/kpiyrn/preview
+https://hackersandslackers.com/sqlalchemy-data-models/
+https://leportella.com/sqlalchemy-tutorial.html
