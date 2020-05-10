@@ -10,3 +10,10 @@ class TrackEntity(Base):
 
     def __repr__(self):
         return f'Track id:{self.id}, counter:{self.counter}, createdat:{self.createdat}'
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'counter': self.counter,
+            'createdat': self.createdat
+        }

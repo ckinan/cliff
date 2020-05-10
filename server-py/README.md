@@ -7,6 +7,7 @@ python3 -m pip install Flask
 python3 -m pip install connexion
 python3 -m pip install flask-restful
 
+pip freeze | xargs pip uninstall -y
 pip install -r ./requirements.txt
 export FLASK_DEBUG=1
 export FLASK_APP=server.py
