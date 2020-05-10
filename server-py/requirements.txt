@@ -1,2 +1,4 @@
 Flask==1.1.2
 ptvsd==4.3.2
+Flask-SQLAlchemy==2.4.1
+psycopg2==2.8.5

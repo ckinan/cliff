@@ -6,6 +6,14 @@ source .venv/bin/activate
 python3 -m pip install Flask
 python3 -m pip install connexion
 python3 -m pip install flask-restful
+
+pip install -r ./requirements.txt
+export FLASK_DEBUG=1
+export FLASK_APP=server.py
+python -m flask run -h 0.0.0.0 -p 5000 --no-debugger --no-reload
+
+chmod +x web-dev.sh
+./web-dev.sh
 ```
 
 - https://stackoverflow.com/questions/54106071/how-to-setup-virtual-environment-for-python-in-vs-code
