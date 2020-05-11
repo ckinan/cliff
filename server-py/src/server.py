@@ -27,4 +27,4 @@ sess.init_app(app)
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000')
 
-from .routes import AccountRoute, TrackRoute
+from .routes import AuthRoute, AccountRoute, TrackRoute
