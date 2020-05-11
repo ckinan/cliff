@@ -5,14 +5,14 @@ from flask_login import login_required
 from flask import request
 import datetime
 
-@app.route('/tracks', methods=['GET'])
+@app.route('/api/tracks', methods=['GET'])
 @login_required
 def get_all_tracks():
     return {
         'tracks': [x.to_dict() for x in CLIFF_DB_SESSION.query(TrackEntity).all()]
     }
 
-@app.route('/track', methods=['POST'])
+@app.route('/api/track', methods=['POST'])
 @login_required
 def save_track():
     req_data = request.get_json()

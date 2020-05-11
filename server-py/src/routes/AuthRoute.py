@@ -5,7 +5,14 @@ from flask import request
 from flask_login import login_required, logout_user, login_user
 import bcrypt
 
-@app.route('/login', methods=['POST'])
+@app.errorhandler(401)
+def resource_not_found(e):
+    return {
+        'isAuthenticated': False,
+        'message': str(e)
+    }, 401
+
+@app.route('/api/login', methods=['POST'])
 def login():
     req_data = request.get_json()
     username = req_data['username']
@@ -22,7 +29,7 @@ def login():
             'isAuthenticated': False
         }, 401
     
-@app.route('/logout', methods=['POST'])
+@app.route('/api/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()

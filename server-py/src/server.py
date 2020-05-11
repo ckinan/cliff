@@ -4,7 +4,7 @@ import os
 from .model.Model import SessionManager
 from flask_login import LoginManager
 from flask_session import Session
-
+from flask_cors import CORS
 import redis
 
 app = Flask(__name__)
@@ -23,6 +23,16 @@ login_manager.init_app(app)
 sess = Session()
 sess.init_app(app)
 
+app.logger.info('------------>>>>>>> client url')
+app.logger.info(os.environ.get('CLIENT_URL'))
+
+CORS(
+    app,
+    supports_credentials=True,
+    resources={'/api/*': {
+        "origins": os.environ.get('CLIENT_URL')
+    }}
+)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000')

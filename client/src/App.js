@@ -7,7 +7,7 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/api/server/checkauth`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/api/me`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -65,8 +65,8 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
 
   const handeLogout = async (e) => {
     e.preventDefault();
-    fetch(`${process.env.REACT_APP_SERVER_URL}/api/server/logout`, {
-      method: 'GET',
+    fetch(`${process.env.REACT_APP_SERVER_URL}/api/logout`, {
+      method: 'POST',
       credentials: 'include',
       headers: {
         'Access-Control-Allow-Credentials': true,
@@ -82,7 +82,7 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`${process.env.REACT_APP_SERVER_URL}/login`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/api/login`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -147,7 +147,7 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
   const [records, setRecords] = useState([]);
 
   const fetchTracks = () => {
-    fetch(`${process.env.REACT_APP_SERVER_URL}/api/server/tracks`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/api/tracks`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -174,7 +174,7 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
       counter: value,
     };
 
-    fetch(`${process.env.REACT_APP_SERVER_URL}/api/server/track`, {
+    fetch(`${process.env.REACT_APP_SERVER_URL}/api/track`, {
       method: 'POST',
       credentials: 'include',
       headers: {
