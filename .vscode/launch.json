@@ -5,19 +5,20 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Flask",
+      "name": "Host Remote Cliff",
       "type": "python",
-      "request": "launch",
-      "module": "flask",
-      "env": {
-        "FLASK_APP": "./server-py/src/server.py",
-        "FLASK_ENV": "development",
-        "FLASK_DEBUG": "0"
-      },
-      "args": ["run", "--no-debugger", "--no-reload"]
+      "request": "attach",
+      "port": 3000,
+      "host": "localhost",
+      "pathMappings": [
+        {
+          "localRoot": "${workspaceFolder}/server-py",
+          "remoteRoot": "${workspaceFolder}/server-py"
+        }
+      ]
     },
     {
-      "name": "Python: Remote Attach",
+      "name": "Docker Remote Cliff",
       "type": "python",
       "request": "attach",
       "port": 3000,

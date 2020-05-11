@@ -1,7 +1,8 @@
 from sqlalchemy import Column, Integer, Text
 from .Model import Base
+from flask_login import UserMixin
 
-class AccountEntity(Base):
+class AccountEntity(UserMixin, Base):
     __tablename__ = "account"
 
     id = Column(Integer, primary_key=True)
