@@ -68,7 +68,6 @@ services:
       context: ./server-py
       dockerfile: Dockerfile
     ports:
-      - '3000:3000'
       - '7001:5000'
     depends_on:
       - redis
@@ -83,3 +82,4 @@ services:
       - SECRET_KEY=${SECRET_KEY}
       - SESSION_REDIS=${SESSION_REDIS}
       - CLIENT_URL=${CLIENT_URL}
+      - HOST_DOCKER_INTERNAL=host.docker.internal

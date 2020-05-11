@@ -1,5 +1,4 @@
 from flask import Flask
-import datetime
 import os
 from .model.Model import SessionManager
 from flask_login import LoginManager
@@ -10,8 +9,8 @@ import redis
 app = Flask(__name__)
 
 if int(os.environ.get('FLASK_DEBUG')) == 1:
-    import ptvsd
-    ptvsd.enable_attach(address=('0.0.0.0', 3000))
+    import pydevd_pycharm
+    pydevd_pycharm.settrace(os.environ.get('HOST_DOCKER_INTERNAL'), port=3000, stdoutToServer=True, stderrToServer=True)
 
 CLIFF_DB_SESSION = SessionManager(os.environ.get('SQLALCHEMY_DATABASE_URI')).get_session()
 
@@ -37,4 +36,5 @@ CORS(
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port='5000')
 
+# Load routes implicitly
 from .routes import AuthRoute, AccountRoute, TrackRoute

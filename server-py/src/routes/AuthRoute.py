@@ -6,7 +6,7 @@ from flask_login import login_required, logout_user, login_user
 import bcrypt
 
 @app.errorhandler(401)
-def resource_not_found(e):
+def unauthorized(e):
     return {
         'isAuthenticated': False,
         'message': str(e)
