@@ -4,5 +4,5 @@ RUN pip install -r /tmp/requirements.txt
 WORKDIR /opt/app
 ENV PATH=$PATH:/root/.local/bin
 COPY . .
-RUN chmod +x /opt/app/run.sh
+RUN chmod +x /opt/app/run-prod.sh
 CMD /opt/app/run-prod.sh
