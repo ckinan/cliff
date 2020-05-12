@@ -57,33 +57,54 @@ services:
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL_CLIENT}
     stdin_open: true
     tty: true
-  server-prod:
-    container_name: cliff-server-container-prod
+  #server-prod:
+  #  container_name: cliff-server-container-prod
+  #  build:
+  #    context: ./server
+  #    dockerfile: Dockerfile
+  #  volumes:
+  #    - ./server:/opt/app
+  #    - /opt/app/node_modules
+  #  ports:
+  #    - 7001:7001
+  #  depends_on:
+  #    - redis-prod
+  #    - postgres-prod
+  #  environment:
+  #    - PGUSER=${PGUSER}
+  #    - PGHOST=${PGHOST_PROD}
+  #    - PGPASSWORD=${PGPASSWORD}
+  #    - PGDATABASE=${PGDATABASE}
+  #    - PGPORT=${PGPORT}
+  #    - REDIS_HOST=${REDIS_HOST_PROD}
+  #    - REDIS_PORT=${REDIS_PORT}
+  #    - REDIS_PASSWORD=${REDIS_PASSWORD}
+  #    - SERVER_PORT=${SERVER_PORT_PROD}
+  #    - SERVER_URL=${SERVER_URL}
+  #    - CLIENT_URL=${CLIENT_URL_PROD}
+  #    - SESSION_SECRET=${SESSION_SECRET}
+  #    - VIRTUAL_HOST=${VIRTUAL_HOST_SERVER}
+  #    - VIRTUAL_PORT=${VIRTUAL_PORT_SERVER}
+  #    - LETSENCRYPT_HOST=${LETSENCRYPT_HOST_SERVER}
+  #    - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL_SERVER}
+  server-py:
+    container_name: cliff-server-py-container-prod
     build:
-      context: ./server
+      context: ./server-py
       dockerfile: Dockerfile
-    volumes:
-      - ./server:/opt/app
-      - /opt/app/node_modules
     ports:
-      - 7001:7001
+      - '7001:5000'
     depends_on:
       - redis-prod
       - postgres-prod
+    volumes:
+      - ./server-py:/opt/app
     environment:
-      - PGUSER=${PGUSER}
-      - PGHOST=${PGHOST_PROD}
-      - PGPASSWORD=${PGPASSWORD}
-      - PGDATABASE=${PGDATABASE}
-      - PGPORT=${PGPORT}
-      - REDIS_HOST=${REDIS_HOST_PROD}
-      - REDIS_PORT=${REDIS_PORT}
-      - REDIS_PASSWORD=${REDIS_PASSWORD}
-      - SERVER_PORT=${SERVER_PORT_PROD}
-      - SERVER_URL=${SERVER_URL}
+      - FLASK_DEBUG=1
+      - FLASK_APP=/opt/app/src/server.py
+      - FLASK_ENV=development
+      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI_PROD}
+      - SECRET_KEY=${SECRET_KEY}
+      - SESSION_REDIS=${SESSION_REDIS_PROD}
       - CLIENT_URL=${CLIENT_URL_PROD}
-      - SESSION_SECRET=${SESSION_SECRET}
-      - VIRTUAL_HOST=${VIRTUAL_HOST_SERVER}
-      - VIRTUAL_PORT=${VIRTUAL_PORT_SERVER}
-      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST_SERVER}
-      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL_SERVER}
+      - HOST_DOCKER_INTERNAL=host.docker.internal
