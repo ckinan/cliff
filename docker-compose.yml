@@ -75,7 +75,7 @@ services:
     volumes:
       - ./server-py:/opt/app
     environment:
-      - FLASK_DEBUG=1
+      - FLASK_DEBUG=0
       - FLASK_APP=/opt/app/src/server.py
       - FLASK_ENV=development
       - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}

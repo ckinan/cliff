@@ -91,7 +91,7 @@ services:
     container_name: cliff-server-py-container-prod
     build:
       context: ./server-py
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
     ports:
       - '7001:5000'
     depends_on:
@@ -108,3 +108,7 @@ services:
       - SESSION_REDIS=${SESSION_REDIS_PROD}
       - CLIENT_URL=${CLIENT_URL_PROD}
       - HOST_DOCKER_INTERNAL=host.docker.internal
+      - VIRTUAL_HOST=${VIRTUAL_HOST_SERVER}
+      - VIRTUAL_PORT=${VIRTUAL_PORT_SERVER}
+      - LETSENCRYPT_HOST=${LETSENCRYPT_HOST_SERVER}
+      - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL_SERVER}
