@@ -10,10 +10,14 @@ from sqlalchemy.sql import func as sqlfunc
 @app.route('/api/tracks', methods=['GET'])
 @login_required
 def get_all_tracks():
-    print('2')
+    result = list(CLIFF_DB_SESSION.execute("""
+        select sum(counter::numeric) as counter, date(createdat)
+        from track group by date(createdat)
+        order by date(createdat) desc
+    """))
     return {
         'tracks': [x.to_dict() for x in CLIFF_DB_SESSION.query(TrackEntity).all()],
-        'summary': [{'counter': float(x[0]), 'date': x[1]} for x in CLIFF_DB_SESSION.query(sqlfunc.sum(TrackEntity.counter.cast(Numeric)).label("counter"), func.date(TrackEntity.createdat)).group_by(func.date(TrackEntity.createdat)).order_by(desc(func.date(TrackEntity.createdat))).all()]
+        'summary': [{'counter': float(x[0]), 'date': x[1].strftime("%a %d %B %Y")} for x in result],
     }
 
 @app.route('/api/track', methods=['POST'])

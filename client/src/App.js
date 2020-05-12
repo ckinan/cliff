@@ -227,7 +227,7 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
               <div className="grid grid-cols-4" key={index}>
                 <div className="border-b px-4 py-2 grid">{record.counter}</div>
                 <div className="border-b px-4 py-2 grid col-span-3">
-                  {moment(record.date).local().format('YYYY-MM-DD')}
+                  {record.date}
                 </div>
               </div>
             );

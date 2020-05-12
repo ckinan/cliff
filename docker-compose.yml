@@ -83,3 +83,4 @@ services:
       - SESSION_REDIS=${SESSION_REDIS}
       - CLIENT_URL=${CLIENT_URL}
       - HOST_DOCKER_INTERNAL=host.docker.internal
+      - TZ=America/Lima
