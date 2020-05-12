@@ -145,6 +145,7 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
 
 function Protected({ isAuthenticated, setIsAuthenticated }) {
   const [records, setRecords] = useState([]);
+  const [summary, setSummary] = useState([]);
 
   const fetchTracks = () => {
     fetch(`${process.env.REACT_APP_SERVER_URL}/api/tracks`, {
@@ -159,6 +160,7 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
       })
       .then(function (json) {
         setRecords(json.tracks.reverse());
+        setSummary(json.summary);
       });
   };
 
@@ -215,6 +217,22 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
               1
             </button>
           </div>
+          <h1 className="text-2xl text-center pt-2">Summary</h1>
+          <div className="grid grid-cols-4">
+            <div className="border-b px-4 py-2 grid">Count</div>
+            <div className="border-b px-4 py-2 grid col-span-3">Date</div>
+          </div>
+          {summary.map((record, index) => {
+            return (
+              <div className="grid grid-cols-4" key={index}>
+                <div className="border-b px-4 py-2 grid">{record[0]}</div>
+                <div className="border-b px-4 py-2 grid col-span-3">
+                  {moment(record[1]).local().format('YYYY-MM-DD')}
+                </div>
+              </div>
+            );
+          })}
+          <h1 className="text-2xl text-center pt-2">Details</h1>
           <div className="grid grid-cols-4">
             <div className="border-b px-4 py-2 grid">Count</div>
             <div className="border-b px-4 py-2 grid col-span-3">Date</div>
