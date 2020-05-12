@@ -158,7 +158,7 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
         return response.json();
       })
       .then(function (json) {
-        setRecords(json.tracks);
+        setRecords(json.tracks.reverse());
       });
   };
 
