@@ -102,7 +102,7 @@ services:
     environment:
       - FLASK_DEBUG=0
       - FLASK_APP=/opt/app/src/server.py
-      - FLASK_ENV=development
+      - FLASK_ENV=production
       - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI_PROD}
       - SECRET_KEY=${SECRET_KEY}
       - SESSION_REDIS=${SESSION_REDIS_PROD}
