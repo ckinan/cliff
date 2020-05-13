@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 if int(os.environ.get('FLASK_DEBUG')) == 1:
     import pydevd_pycharm
-    pydevd_pycharm.settrace(os.environ.get('HOST_DOCKER_INTERNAL'), port=3000, stdoutToServer=True, stderrToServer=True)
+    pydevd_pycharm.settrace(os.environ.get('HOST_DOCKER_INTERNAL'), port=3000, stdoutToServer=False, stderrToServer=False)
 
 CLIFF_DB_SESSION = SessionManager(os.environ.get('SQLALCHEMY_DATABASE_URI')).get_session()
 
