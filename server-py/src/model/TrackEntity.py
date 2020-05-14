@@ -1,12 +1,12 @@
-from sqlalchemy import Column, Integer, Float, DateTime
-from .Model import Base
+from .. import db
 
-class TrackEntity(Base):
+
+class TrackEntity(db.Model):
     __tablename__ = "track"
 
-    id = Column(Integer, primary_key=True)
-    counter = Column(Float, nullable=False)
-    createdat = Column(DateTime, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    counter = db.Column(db.Float, nullable=False)
+    createdat = db.Column(db.DateTime, nullable=False)
 
     def __repr__(self):
         return f'Track id:{self.id}, counter:{self.counter}, createdat:{self.createdat}'

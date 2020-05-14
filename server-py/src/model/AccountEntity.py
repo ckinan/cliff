@@ -1,13 +1,13 @@
-from sqlalchemy import Column, Integer, Text
-from .Model import Base
+from .. import db
 from flask_login import UserMixin
 
-class AccountEntity(UserMixin, Base):
+
+class AccountEntity(UserMixin, db.Model):
     __tablename__ = "account"
 
-    id = Column(Integer, primary_key=True)
-    username = Column(Text, nullable=False)
-    password = Column(Text, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.Text, nullable=False)
+    password = db.Column(db.Text, nullable=False)
 
     def __repr__(self):
         return f'User id:{self.id}, username:{self.username}'

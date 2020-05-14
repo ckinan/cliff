@@ -8,3 +8,4 @@ class Config(object):
     SESSION_TYPE = 'redis'
     SESSION_REDIS = redis.from_url(os.environ.get('SESSION_REDIS'))
     FLASK_RUN_PORT = os.environ.get('FLASK_RUN_PORT')
+    SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')

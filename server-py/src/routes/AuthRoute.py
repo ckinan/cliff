@@ -1,7 +1,6 @@
-import datetime
 from ..model.AccountEntity import AccountEntity
-from ..server import app, CLIFF_DB_SESSION, login_manager
-from flask import request
+from .. import db, login_manager
+from flask import request, current_app as app
 from flask_login import login_required, logout_user, login_user
 import bcrypt
 
@@ -17,7 +16,7 @@ def login():
     req_data = request.get_json()
     username = req_data['username']
     password = req_data['password']
-    account = CLIFF_DB_SESSION.query(AccountEntity).filter_by(username=username).one()
+    account = db.session.query(AccountEntity).filter_by(username=username).one()
     if bcrypt.checkpw(password.encode('utf8'), account.password.encode('utf8')):
         login_user(account)
         return {
@@ -39,4 +38,4 @@ def logout():
 
 @login_manager.user_loader
 def load_user(userid):
-    return CLIFF_DB_SESSION.query(AccountEntity).filter_by(id=userid).one()
+    return db.session.query(AccountEntity).filter_by(id=userid).one()

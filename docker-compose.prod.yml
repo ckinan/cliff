@@ -101,7 +101,7 @@ services:
       - ./server-py:/opt/app
     environment:
       - FLASK_DEBUG=0
-      - FLASK_APP=/opt/app/src/server.py
+      - FLASK_APP=/opt/app/src
       - FLASK_ENV=production
       - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI_PROD}
       - SECRET_KEY=${SECRET_KEY}

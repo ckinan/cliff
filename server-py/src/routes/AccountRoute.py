@@ -1,13 +1,13 @@
-import datetime
 from ..model.AccountEntity import AccountEntity
-from ..server import app, CLIFF_DB_SESSION, login_manager
-from flask_login import login_required, logout_user, current_user, login_user
+from .. import db
+from flask import current_app as app
+from flask_login import login_required, current_user
 
 @app.route('/api/accounts', methods=['GET'])
 @login_required
 def get_all_accounts():
     return {
-        'accounts': [x.to_dict() for x in CLIFF_DB_SESSION.query(AccountEntity).all()]
+        'accounts': [x.to_dict() for x in db.session.query(AccountEntity).all()]
     }
 
 @app.route('/api/me', methods=['GET'])
