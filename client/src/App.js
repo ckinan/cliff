@@ -200,6 +200,12 @@ function Protected({ isAuthenticated, setIsAuthenticated }) {
           <div className="text-center">
             <button
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-4 border-green-600"
+              onClick={(e) => handleAdd(e, 0.25)}
+            >
+              1/4
+            </button>
+            <button
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-4 border-green-600"
               onClick={(e) => handleAdd(e, 0.33)}
             >
               1/3
