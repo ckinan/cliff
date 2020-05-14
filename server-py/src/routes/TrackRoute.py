@@ -13,7 +13,7 @@ def get_all_tracks():
         order by date(createdat) desc
     """))
     return {
-        'tracks': [x.to_dict() for x in db.session.query(TrackEntity).all()],
+        'tracks': [x.to_dict() for x in db.session.query(TrackEntity).order_by(TrackEntity.createdat.asc()).all()],
         'summary': [{'counter': float(x[0]), 'date': x[1].strftime("%a %d %B %Y")} for x in result],
     }
 
