@@ -28,7 +28,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./client:/opt/app
-      - /opt/app/node_modules
     ports:
       - 7000:3000
     environment:

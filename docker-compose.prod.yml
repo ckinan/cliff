@@ -46,7 +46,6 @@ services:
         - REACT_APP_SERVER_URL=${SERVER_URL_PROD}
     volumes:
       - ./client:/opt/app
-      - /opt/app/node_modules
     ports:
       - 7000:80
     environment:
