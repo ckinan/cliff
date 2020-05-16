@@ -63,7 +63,7 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handeLogout = async (e) => {
+  const handleLogout = async (e) => {
     e.preventDefault();
     fetch(`${process.env.REACT_APP_SERVER_URL}/api/logout`, {
       method: 'POST',
@@ -107,7 +107,7 @@ function Header({ isAuthenticated, setIsAuthenticated }) {
       <ul>
         <li>
           {isAuthenticated === true ? (
-            <button type="button" onClick={(e) => handeLogout(e)}>
+            <button type="button" onClick={(e) => handleLogout(e)}>
               Logout
             </button>
           ) : (
