@@ -4,10 +4,14 @@ import Body from './Body';
 
 const Protected: React.FC = () => {
     return (
-        <>
-            <Header />
-            <Body />
-        </>
+        <div>
+            <div className="fixed bg-white shadow-md w-full p-2 text-center">
+                <Header />
+            </div>
+            <div className="pt-16">
+                <Body />
+            </div>
+        </div>
     );
 };
 

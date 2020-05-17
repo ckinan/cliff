@@ -59,9 +59,8 @@ const Body: React.FC = () => {
      };
 
     return (
-        <div>
+        <div className="my-4">
             <div className="max-w-md mx-auto">
-              <h1 className="text-5xl text-center">Cliff</h1>
               <div className="text-center">
                 <button
                   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-2 border-green-600"
@@ -94,7 +93,7 @@ const Body: React.FC = () => {
                   1
                 </button>
               </div>
-              <h1 className="text-2xl text-center pt-2">Summary</h1>
+              <h1 className="text-center pt-2">Summary</h1>
               <div className="grid grid-cols-4">
                 <div className="border-b px-4 py-2 grid">Count</div>
                 <div className="border-b px-4 py-2 grid col-span-3">Date</div>
@@ -109,7 +108,7 @@ const Body: React.FC = () => {
                   </div>
                 );
               })}
-              <h1 className="text-2xl text-center pt-2">Details</h1>
+              <h1 className="text-center pt-2">Details</h1>
               <div className="grid grid-cols-4">
                 <div className="border-b px-4 py-2 grid">Count</div>
                 <div className="border-b px-4 py-2 grid col-span-3">Date</div>

@@ -38,9 +38,15 @@ const Header: React.FC = () => {
 
     return (
         <>
-            <button type="button" onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => handleLogout(e)}>
-              Logout
-            </button>
+            <div>
+                CLIFF
+            </div>
+            <div className="absolute top-0 right-0 py-2 px-4 hover:bg-gray-100 font-bold">
+                <button type="button" onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => handleLogout(e)}>
+                  Logout
+                </button>
+            </div>
+
         </>
     );
 };
