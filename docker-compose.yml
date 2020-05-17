@@ -35,32 +35,6 @@ services:
       - REACT_APP_SERVER_URL=${SERVER_URL}
     stdin_open: true
     tty: true
-  #  server:
-  #    container_name: cliff-server-container
-  #    build:
-  #      context: ./server
-  #      dockerfile: Dockerfile
-  #    volumes:
-  #      - ./server:/opt/app
-  #      - /opt/app/node_modules
-  #    ports:
-  #      - 7001:7001
-  #    depends_on:
-  #      - redis
-  #      - postgres
-  #    environment:
-  #      - PGUSER=${PGUSER}
-  #      - PGHOST=${PGHOST}
-  #      - PGPASSWORD=${PGPASSWORD}
-  #      - PGDATABASE=${PGDATABASE}
-  #      - PGPORT=${PGPORT}
-  #      - REDIS_HOST=${REDIS_HOST}
-  #      - REDIS_PORT=${REDIS_PORT}
-  #      - REDIS_PASSWORD=${REDIS_PASSWORD}
-  #      - SERVER_PORT=${SERVER_PORT}
-  #      - SERVER_URL=${SERVER_URL}
-  #      - CLIENT_URL=${CLIENT_URL}
-  #      - SESSION_SECRET=${SESSION_SECRET}
   server-py:
     container_name: cliff-server-py-container
     build:
