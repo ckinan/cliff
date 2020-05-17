@@ -48,29 +48,43 @@ const Login: React.FC = () => {
       };
 
     return (
-        <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleLogin(e)}>
-          <div>
-            <label>Username:</label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div>
-            <label>Password:</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div>
-            <button type="submit" value="Submit">
-              Login
-            </button>
-          </div>
-        </form>
+        <div className="flex flex-col p-2 h-screen">
+            <div className="max-w-md m-auto">
+                <h1 className="text-5xl text-center">Cliff</h1>
+                <p className="text-2xl text-center">Sign in to Cliff</p>
+
+                <div className="border p-5 my-5 rounded">
+                    <form onSubmit={(e: React.FormEvent<HTMLFormElement>) => handleLogin(e)}>
+                      <div>
+                        <label className="block mb-2">Username</label>
+                        <input
+                          type="text"
+                          value={username}
+                          onChange={(e) => setUsername(e.target.value)}
+                          className="border rounded py-2 px-3 w-full focus:outline-none focus:shadow-outline"
+                        />
+                      </div>
+                      <div className="py-2">
+                        <label className="block mb-2">Password</label>
+                        <input
+                          type="password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          className="border rounded py-2 px-3 w-full focus:outline-none focus:shadow-outline"
+                        />
+                      </div>
+                      <div className="py-2">
+                        <button
+                            type="submit"
+                            value="Submit"
+                            className="w-full rounded bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 border-solid border-2 border-green-600">
+                          Login
+                        </button>
+                      </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     );
 };
 
