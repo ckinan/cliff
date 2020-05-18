@@ -4,14 +4,17 @@ import { BrowserRouter } from 'react-router-dom';
 import RootContainer from './RootContainer';
 
 const App: React.FC = () => {
-  const [appState, appDispatch] = useReducer(AppReducer, appContextInitialState);
+  const [appState, appDispatch] = useReducer(
+    AppReducer,
+    appContextInitialState
+  );
 
   return (
-      <BrowserRouter>
-        <AppContext.Provider value={{appState, appDispatch}}>
-          <RootContainer/>
-        </AppContext.Provider>
-      </BrowserRouter>
+    <BrowserRouter>
+      <AppContext.Provider value={{ appState, appDispatch }}>
+        <RootContainer />
+      </AppContext.Provider>
+    </BrowserRouter>
   );
 };
 
