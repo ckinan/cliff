@@ -22,3 +22,6 @@ chmod +x web-dev.sh
 https://toutiao.io/posts/kpiyrn/preview
 https://hackersandslackers.com/sqlalchemy-data-models/
 https://leportella.com/sqlalchemy-tutorial.html
+
+https://flask.palletsprojects.com/en/1.1.x/config/
+https://github.com/fengsp/flask-session/blob/master/docs/index.rst#configuration

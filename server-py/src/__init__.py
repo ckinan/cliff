@@ -1,5 +1,10 @@
-import os
+# Monkeypatch
+from . import monkeypatch
 from flask import Flask
+Flask = monkeypatch.CliffFlask
+
+# All other global imports
+import os
 from flask_login import LoginManager
 from flask_session import Session
 from flask_cors import CORS
@@ -27,7 +32,6 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
     sess.init_app(app)
-
     cors.init_app(app, supports_credentials=True, resources={'/api/*': {"origins": os.environ.get('CLIENT_URL')}})
 
     app.logger.info(os.environ.get('CLIENT_URL'))
