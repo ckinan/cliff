@@ -2,12 +2,22 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 const Body: React.FC = () => {
-  const [records, setRecords] = useState([]);
-  const [summary, setSummary] = useState([]);
+  const [tracksByHour, setTracksByHour] = useState<Array<any>>([]);
   const [report, setReport] = useState([]);
   const [reportSummary, setReportSummary] = useState([]);
 
-  const fetchTracks = async () => {
+  const handlePagination = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, requestedPage: number) => {
+    e.preventDefault();
+    fetchTracks(requestedPage);
+  };
+
+  const fetchTracks = async (page: number) => {
+    debugger;
+    let days:number = 0;
+    if(tracksByHour.length > 0) {
+      days = moment(tracksByHour[0].date).local().add(page, 'day').diff(moment(), 'days');
+    }
+
     const headers: HeadersInit = new Headers();
     headers.set('Access-Control-Allow-Credentials', 'true');
 
@@ -18,14 +28,11 @@ const Body: React.FC = () => {
     };
 
     const response = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/api/tracks`,
+      `${process.env.REACT_APP_SERVER_URL}/api/tracks?page=${days}`,
       params
     ).then((response) => {
       return response.json();
     });
-
-    setRecords(response.tracks.reverse());
-    setSummary(response.summary);
 
     // Process records by hour
     let tmpReport:any = [
@@ -57,19 +64,19 @@ const Body: React.FC = () => {
     let tmpReportSummary:any = [0,0,0,0,0,0,0];
     let track:any;
     for(track of response.tracksByHour) {
-      // console.log(`${moment(track.date).local().hour()+1}-${moment(track.date).local().weekday()-1}`);
-      tmpReport[moment(track.date).local().hour()][moment(track.date).local().weekday()-1] = track.counter;
-      tmpReportSummary[moment(track.date).local().weekday()-1] += track.counter;
+      //console.log(`${moment(track.date).local()}----${moment(track.date).local().hour()}----${moment(track.date).local().isoWeekday()-1}----${track.counter}`);
+      tmpReport[moment(track.date).local().hour()][moment(track.date).local().isoWeekday()-1] = track.counter;
+      tmpReportSummary[moment(track.date).local().isoWeekday()-1] += track.counter;
     }
+
+    setTracksByHour(response.tracksByHour);
     setReport(tmpReport);
     setReportSummary(tmpReportSummary);
-    console.log(report);
-    console.log(tmpReportSummary);
   };
 
   useEffect(() => {
     document.title = 'Main - Cliff';
-    fetchTracks();
+    fetchTracks(0);
   }, []);
 
   const handleAdd = (
@@ -98,7 +105,7 @@ const Body: React.FC = () => {
         return response.json();
       })
       .then(() => {
-        fetchTracks();
+        fetchTracks(0);
       });
   };
 
@@ -121,7 +128,7 @@ const Body: React.FC = () => {
   };
 
   return (
-    <div className="my-4">
+    <div>
       <div className="max-w-md mx-auto">
         <div className="text-center">
           <button
@@ -131,22 +138,6 @@ const Body: React.FC = () => {
             }
           >
             1/5
-          </button>
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-2 border-green-600"
-            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-              handleAdd(e, 0.25)
-            }
-          >
-            1/4
-          </button>
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-2 border-green-600"
-            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-              handleAdd(e, 0.33)
-            }
-          >
-            1/3
           </button>
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-2 border-green-600"
@@ -166,7 +157,34 @@ const Body: React.FC = () => {
           </button>
         </div>
 
-        <table className="border-collapse border-2 border-gray-500 text-xs mx-auto mt-3">
+        <div className="text-center">
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-3 border-solid border-2 border-green-600 text-xs"
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+              handlePagination(e, -7)
+            }
+          >
+            Previous Week
+          </button>
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-3 border-solid border-2 border-green-600 text-xs"
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+              handlePagination(e, 7)
+            }
+          >
+            Next Week
+          </button>
+        </div>
+
+        <div className="text-center">
+          { tracksByHour.length > 0 ?
+              `${moment(tracksByHour[0].date).local().format('YYYY-MM-DD')} - 
+              ${moment(tracksByHour[tracksByHour.length-1].date).local().format('YYYY-MM-DD')}` : ''
+          }
+        </div>
+
+
+        <table className="border-collapse border-2 border-gray-500 text-xs mx-auto mt-3 mb-3">
           <thead>
           <tr>
             <th className="border border-gray-400 w-8 px-4 py-2 bg-gray-200">-</th>
@@ -205,37 +223,6 @@ const Body: React.FC = () => {
 
           </tbody>
         </table>
-
-        <h1 className="text-center pt-2">Summary</h1>
-        <div className="grid grid-cols-4">
-          <div className="border-b px-4 py-2 grid">Count</div>
-          <div className="border-b px-4 py-2 grid col-span-3">Date</div>
-        </div>
-        {summary.map((record: any, index: number) => {
-          return (
-            <div className="grid grid-cols-4" key={index}>
-              <div className="border-b px-4 py-2 grid">{record.counter}</div>
-              <div className="border-b px-4 py-2 grid col-span-3">
-                {record.date}
-              </div>
-            </div>
-          );
-        })}
-        <h1 className="text-center pt-2">Details</h1>
-        <div className="grid grid-cols-4">
-          <div className="border-b px-4 py-2 grid">Count</div>
-          <div className="border-b px-4 py-2 grid col-span-3">Date</div>
-        </div>
-        {records.map((record: any, index) => {
-          return (
-            <div className="grid grid-cols-4" key={index}>
-              <div className="border-b px-4 py-2 grid">{record.counter}</div>
-              <div className="border-b px-4 py-2 grid col-span-3">
-                {moment(record.createdat).local().format('YYYY-MM-DD HH:mm:ss')}
-              </div>
-            </div>
-          );
-        })}
       </div>
     </div>
   );

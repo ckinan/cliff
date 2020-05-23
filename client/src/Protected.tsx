@@ -8,7 +8,7 @@ const Protected: React.FC = () => {
       <div className="fixed bg-white shadow-md w-full p-2 text-center">
         <Header />
       </div>
-      <div className="pt-16">
+      <div className="pt-12">
         <Body />
       </div>
     </div>
