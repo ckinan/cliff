@@ -17,5 +17,4 @@ class Config(object):
     # Others
     FLASK_RUN_PORT = os.environ.get('FLASK_RUN_PORT')
     SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-
-
+    SQLALCHEMY_TRACK_MODIFICATIONS = False  # https://stackoverflow.com/a/33790196/7054799
