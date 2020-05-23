@@ -4,7 +4,8 @@ import moment from 'moment';
 const Body: React.FC = () => {
   const [records, setRecords] = useState([]);
   const [summary, setSummary] = useState([]);
-  const [recordsByHour, setRecordsByHour] = useState([]);
+  const [report, setReport] = useState([]);
+  const [reportSummary, setReportSummary] = useState([]);
 
   const fetchTracks = async () => {
     const headers: HeadersInit = new Headers();
@@ -27,7 +28,7 @@ const Body: React.FC = () => {
     setSummary(response.summary);
 
     // Process records by hour
-    let report:any = [
+    let tmpReport:any = [
       [0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0],
@@ -53,13 +54,17 @@ const Body: React.FC = () => {
       [0,0,0,0,0,0,0],
       [0,0,0,0,0,0,0],
     ];
+    let tmpReportSummary:any = [0,0,0,0,0,0,0];
     let track:any;
     for(track of response.tracksByHour) {
       // console.log(`${moment(track.date).local().hour()+1}-${moment(track.date).local().weekday()-1}`);
-      report[moment(track.date).local().hour()][moment(track.date).local().weekday()-1] = track.counter;
+      tmpReport[moment(track.date).local().hour()][moment(track.date).local().weekday()-1] = track.counter;
+      tmpReportSummary[moment(track.date).local().weekday()-1] += track.counter;
     }
-    setRecordsByHour(report);
+    setReport(tmpReport);
+    setReportSummary(tmpReportSummary);
     console.log(report);
+    console.log(tmpReportSummary);
   };
 
   useEffect(() => {
@@ -175,7 +180,7 @@ const Body: React.FC = () => {
           </tr>
           </thead>
           <tbody>
-          {recordsByHour.map((record: any, index: number) => {
+          {report.map((record: any, index: number) => {
             return (
               <tr key={index}>
                 <td className="border border-gray-400 text-center bg-gray-200">{index}:00</td>
@@ -189,6 +194,15 @@ const Body: React.FC = () => {
               </tr>
             );
           })}
+          <tr>
+            <td className="border border-gray-400 text-center bg-gray-200">-</td>
+            {reportSummary.map((record: any, index: number) => {
+              return (
+                  <td className="border border-gray-400 text-center bg-gray-200" key={index}>{record.toFixed(2)}</td>
+              );
+            })}
+          </tr>
+
           </tbody>
         </table>
 
