@@ -77,8 +77,8 @@ const Body: React.FC = () => {
   useEffect(() => {
     document.title = 'Main - Cliff';
     fetchTracks(
-        moment().weekday(1).format('YYYY-MM-DD'),
-        moment().weekday(7).format('YYYY-MM-DD')
+        moment().isoWeekday(1).format('YYYY-MM-DD'),
+        moment().isoWeekday(7).format('YYYY-MM-DD')
     );
   }, []);
 
