@@ -2,7 +2,7 @@
 
 Simple habit tracker.
 
-![](screenshot.png)
+![](screenshot-0525.png)
 
 ## Features
 
@@ -11,9 +11,9 @@ Simple habit tracker.
 - [x] Show a summary grouped by Day
 - [x] Show all entries: Counter and timestamp
 - [x] Login
+- [x] Reports
 - [ ] Edit attempt
 - [ ] Delete attempt
-- [ ] Reports
 - [ ] Manage Users
 
 ## Using
