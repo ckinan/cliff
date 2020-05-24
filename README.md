@@ -2,7 +2,7 @@
 
 Simple habit tracker.
 
-![](screenshot-0525.png)
+![](screenshot-0524.png)
 
 ## Features
 
