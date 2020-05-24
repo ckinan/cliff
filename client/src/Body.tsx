@@ -2,21 +2,22 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 const Body: React.FC = () => {
-  const [tracksByHour, setTracksByHour] = useState<Array<any>>([]);
+  const [tracks, setTracks] = useState<Array<any>>([]);
   const [report, setReport] = useState([]);
   const [reportSummary, setReportSummary] = useState([]);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  const handlePagination = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, requestedPage: number) => {
+  const handlePagination = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+                            startDate: string,
+                            endDate: string) => {
     e.preventDefault();
-    fetchTracks(requestedPage);
+    fetchTracks(startDate, endDate);
   };
 
-  const fetchTracks = async (page: number) => {
-    debugger;
-    let days:number = 0;
-    if(tracksByHour.length > 0) {
-      days = moment(tracksByHour[0].date).local().add(page, 'day').diff(moment(), 'days');
-    }
+  const fetchTracks = async (startDate: string, endDate: string) => {
+    setStartDate(startDate);
+    setEndDate(endDate);
 
     const headers: HeadersInit = new Headers();
     headers.set('Access-Control-Allow-Credentials', 'true');
@@ -28,7 +29,7 @@ const Body: React.FC = () => {
     };
 
     const response = await fetch(
-      `${process.env.REACT_APP_SERVER_URL}/api/tracks?page=${days}`,
+      `${process.env.REACT_APP_SERVER_URL}/api/tracks?startDate=${startDate}&endDate=${endDate}`,
       params
     ).then((response) => {
       return response.json();
@@ -62,21 +63,23 @@ const Body: React.FC = () => {
       [0,0,0,0,0,0,0],
     ];
     let tmpReportSummary:any = [0,0,0,0,0,0,0];
-    let track:any;
-    for(track of response.tracksByHour) {
-      //console.log(`${moment(track.date).local()}----${moment(track.date).local().hour()}----${moment(track.date).local().isoWeekday()-1}----${track.counter}`);
+
+    for(let track of response.tracks) {
       tmpReport[moment(track.date).local().hour()][moment(track.date).local().isoWeekday()-1] = track.counter;
       tmpReportSummary[moment(track.date).local().isoWeekday()-1] += track.counter;
     }
 
-    setTracksByHour(response.tracksByHour);
+    setTracks(response.tracks);
     setReport(tmpReport);
     setReportSummary(tmpReportSummary);
   };
 
   useEffect(() => {
     document.title = 'Main - Cliff';
-    fetchTracks(0);
+    fetchTracks(
+        moment().weekday(1).format('YYYY-MM-DD'),
+        moment().weekday(7).format('YYYY-MM-DD')
+    );
   }, []);
 
   const handleAdd = (
@@ -105,7 +108,7 @@ const Body: React.FC = () => {
         return response.json();
       })
       .then(() => {
-        fetchTracks(0);
+        fetchTracks(startDate, endDate);
       });
   };
 
@@ -161,7 +164,11 @@ const Body: React.FC = () => {
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-3 border-solid border-2 border-green-600 text-xs"
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-              handlePagination(e, -7)
+              handlePagination(
+                  e,
+                  moment(startDate).subtract(1, 'weeks').format('YYYY-MM-DD'),
+                  moment(endDate).subtract(1, 'weeks').format('YYYY-MM-DD')
+              )
             }
           >
             Previous Week
@@ -169,7 +176,11 @@ const Body: React.FC = () => {
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-3 border-solid border-2 border-green-600 text-xs"
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-              handlePagination(e, 7)
+              handlePagination(
+                  e,
+                  moment(startDate).add(1, 'weeks').format('YYYY-MM-DD'),
+                  moment(endDate).add(1, 'weeks').format('YYYY-MM-DD')
+              )
             }
           >
             Next Week
@@ -177,24 +188,22 @@ const Body: React.FC = () => {
         </div>
 
         <div className="text-center">
-          { tracksByHour.length > 0 ?
-              `${moment(tracksByHour[0].date).local().format('YYYY-MM-DD')} - 
-              ${moment(tracksByHour[tracksByHour.length-1].date).local().format('YYYY-MM-DD')}` : ''
+          {
+            `From: ${startDate} To: ${endDate}`
           }
         </div>
-
 
         <table className="border-collapse border-2 border-gray-500 text-xs mx-auto mt-3 mb-3">
           <thead>
           <tr>
-            <th className="border border-gray-400 w-8 px-4 py-2 bg-gray-200">-</th>
-            <th className="border border-gray-400 w-8 py-2 bg-gray-200">Mo</th>
-            <th className="border border-gray-400 w-8 py-2 bg-gray-200">Tu</th>
-            <th className="border border-gray-400 w-8 py-2 bg-gray-200">We</th>
-            <th className="border border-gray-400 w-8 py-2 bg-gray-200">Th</th>
-            <th className="border border-gray-400 w-8 py-2 bg-gray-200">Fr</th>
-            <th className="border border-gray-400 w-8 py-2 bg-gray-200">Sa</th>
-            <th className="border border-gray-400 w-8 py-2 bg-gray-200">Su</th>
+            <th className="border border-gray-400 w-8 px-4 bg-gray-200">-</th>
+            <th className="border border-gray-400 w-8 bg-gray-200">Mo</th>
+            <th className="border border-gray-400 w-8 bg-gray-200">Tu</th>
+            <th className="border border-gray-400 w-8 bg-gray-200">We</th>
+            <th className="border border-gray-400 w-8 bg-gray-200">Th</th>
+            <th className="border border-gray-400 w-8 bg-gray-200">Fr</th>
+            <th className="border border-gray-400 w-8 bg-gray-200">Sa</th>
+            <th className="border border-gray-400 w-8 bg-gray-200">Su</th>
           </tr>
           </thead>
           <tbody>
