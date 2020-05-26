@@ -2,6 +2,8 @@
 
 Simple habit tracker.
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ckinan_cliff&metric=alert_status)](https://sonarcloud.io/dashboard?id=ckinan_cliff)
+
 ![](screenshot-0524.png)
 
 ## Features
