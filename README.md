@@ -18,6 +18,9 @@ Simple habit tracker.
 - [ ] Delete attempt
 - [ ] Manage Users
 
+## TODOs
+- [ ] Automation Tests
+
 ## Using
 
 - ReactJS
