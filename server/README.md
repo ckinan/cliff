@@ -27,3 +27,12 @@ Refs
 - https://spring.io/guides/topicals/spring-security-architecture/
 - Custom UsernamePasswordAuthenticationFilter (1): https://leaks.wanari.com/2017/11/28/how-to-make-custom-usernamepasswordauthenticationfilter-with-spring-security
 - Custom UsernamePasswordAuthenticationFilter (2):https://www.baeldung.com/spring-security-extra-login-fields
+
+## TODOs:
+
+1. Add Spring Data JPA to the project
+2. Load users from database
+3. Bcrypt password
+4. Dockerize the project
+5. Connect frontend
+6. Sunset python backend
