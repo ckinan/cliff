@@ -27,6 +27,7 @@ Refs
 - https://spring.io/guides/topicals/spring-security-architecture/
 - Custom UsernamePasswordAuthenticationFilter (1): https://leaks.wanari.com/2017/11/28/how-to-make-custom-usernamepasswordauthenticationfilter-with-spring-security
 - Custom UsernamePasswordAuthenticationFilter (2): https://www.baeldung.com/spring-security-extra-login-fields
+- https://www.baeldung.com/spring-security-authentication-with-a-database
 
 ## TODOs:
 
