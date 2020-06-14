@@ -31,9 +31,9 @@ Refs
 
 ## TODOs:
 
-1. Add Spring Data JPA to the project
-2. Load users from database
-3. Bcrypt password
+1. (done) Add Spring Data JPA to the project
+2. (done) Load users from database
+3. (done) Bcrypt password
 4. Dockerize the project
 5. Connect frontend
 6. Sunset python backend

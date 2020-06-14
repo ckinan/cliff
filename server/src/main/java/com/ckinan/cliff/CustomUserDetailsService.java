@@ -24,9 +24,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (account == null) {
             throw new UsernameNotFoundException(username);
         }
+        // Hardcode the authorities. Cliff doesn't have roles (for now)
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         return new User(account.getUsername(), account.getPassword(), authorities);
     }
 }
