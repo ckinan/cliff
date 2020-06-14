@@ -3,6 +3,7 @@ package com.ckinan.cliff;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "account")
 public class AccountEntity {
 
     @Id
