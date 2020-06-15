@@ -35,25 +35,20 @@ services:
       - REACT_APP_SERVER_URL=${SERVER_URL}
     stdin_open: true
     tty: true
-  server-py:
-    container_name: cliff-server-py-container
+  server:
+    container_name: cliff-server-container
     build:
-      context: ./server-py
+      context: ./server
       dockerfile: Dockerfile
     ports:
-      - '7001:5000'
+      - '7001:8080'
     depends_on:
       - redis
       - postgres
-    volumes:
-      - ./server-py:/opt/app
     environment:
-      - FLASK_DEBUG=1
-      - FLASK_APP=/opt/app/src
-      - FLASK_ENV=development
-      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}
-      - SECRET_KEY=${SECRET_KEY}
-      - SESSION_REDIS=${SESSION_REDIS}
-      - CLIENT_URL=${CLIENT_URL}
-      - HOST_DOCKER_INTERNAL=host.docker.internal
-      - TZ=America/Lima
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - DS_URL=${PGURL}
+      - DS_USER=${PGUSER}
+      - DS_PASSWORD=${PGPASSWORD}
