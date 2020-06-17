@@ -22,8 +22,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/resource").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "/me").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/api/me").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/api/tracks").hasRole("USER")
+                .antMatchers(HttpMethod.POST, "/api/track").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .anyRequest().authenticated();
     }

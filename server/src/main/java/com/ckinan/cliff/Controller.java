@@ -14,14 +14,6 @@ public class Controller {
     @Autowired
     TrackRepository trackRepository;
 
-    @RequestMapping("/resource")
-    public Map<String,Object> resource() {
-        Map<String,Object> model = new HashMap<>();
-        model.put("id", UUID.randomUUID().toString());
-        model.put("content", "Hello World, I'm a protected resource");
-        return model;
-    }
-
     @RequestMapping("/me")
     public Map<String,Object> me() {
         SecurityContext context = SecurityContextHolder.getContext();
@@ -29,16 +21,20 @@ public class Controller {
 
         Map<String,Object> model = new HashMap<>();
         model.put("username", authentication.getName());
-        model.put("principal", authentication.getPrincipal());
-        model.put("authorities", authentication.getAuthorities());
+        model.put("isAuthenticated", true);
         return model;
     }
 
     @RequestMapping("/api/tracks")
-    public Map<String,Object> tracks() {
-        List<TrackEntity> tracks = (List<TrackEntity>) trackRepository.findAll();
+    public Map<String,Object> tracks(@RequestParam String startDate, @RequestParam String endDate) {
+        List<Map<String, Object>> tracks =
+                trackRepository.findTracksByCreatedAtDateRange(
+                        startDate,
+                        endDate);
         Map<String,Object> model = new HashMap<>();
         model.put("tracks", tracks);
+        model.put("startDate", startDate);
+        model.put("endDate", endDate);
         return model;
     }
 
@@ -47,9 +43,9 @@ public class Controller {
         TrackEntity track = new TrackEntity();
         track.setCounter(Double.parseDouble(payload.get("counter").toString()));
         track.setCreatedAt(new Date());
-        track = trackRepository.save(track);
+        trackRepository.save(track);
         Map<String,Object> model = new HashMap<>();
-        model.put("newTrack", track);
+        model.put("status", "OK");
         return model;
     }
 
