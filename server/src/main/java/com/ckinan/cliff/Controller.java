@@ -14,7 +14,7 @@ public class Controller {
     @Autowired
     TrackRepository trackRepository;
 
-    @RequestMapping("/me")
+    @RequestMapping("/api/me")
     public Map<String,Object> me() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
