@@ -25,7 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        LOGGER.info("CLIENT_URL: " + CLIENT_URL);
+        LOGGER.info("CLIENT_URL -> " + CLIENT_URL);
         CustomUsernamePasswordAuthenticationFilter cupaf = new CustomUsernamePasswordAuthenticationFilter();
         cupaf.setAuthenticationSuccessHandler(new CustomAuthenticationSuccessHandler());
         cupaf.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
