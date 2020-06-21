@@ -75,7 +75,7 @@ Open in browser: http://localhost:7000
 
 ## Tools used
 
-- Pycharm
+- Intellij Idea
 - Redis client (e.g. [Another Redis DeskTop Manager](https://www.electronjs.org/apps/anotherredisdesktopmanager))
 
 ## Refs:
