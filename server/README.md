@@ -28,6 +28,56 @@ Refs
 - Custom UsernamePasswordAuthenticationFilter (1): https://leaks.wanari.com/2017/11/28/how-to-make-custom-usernamepasswordauthenticationfilter-with-spring-security
 - Custom UsernamePasswordAuthenticationFilter (2): https://www.baeldung.com/spring-security-extra-login-fields
 - https://www.baeldung.com/spring-security-authentication-with-a-database
+- http://whitfin.io/speeding-up-maven-docker-builds/
+
+# Notes
+
+## Optimize build process docker maven
+
+**Before**
+
+```
+./Dockerfile
+FROM openjdk:14-jdk-alpine
+COPY target/*.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+
+--- Build log ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  05:04 min
+[INFO] Finished at: 2020-06-21T14:36:14Z
+[INFO] ------------------------------------------------------------------------
+```
+
+**After**
+
+```
+./Dockerfile
+# Download and cache maven dependencies
+FROM maven:3.6.3-openjdk-14 AS build
+WORKDIR /opt/app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+# Package the server.jar
+COPY src /opt/app/src
+RUN mvn -f /opt/app/pom.xml package -DskipTests
+
+# Set the actual server
+FROM openjdk:14-jdk-alpine
+COPY --from=build /opt/app/target/server-*.jar /opt/app/server.jar
+ENTRYPOINT ["java","-jar","/opt/app/server.jar"]
+
+--- Build log ---
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  28.324 s
+[INFO] Finished at: 2020-06-21T14:40:49Z
+[INFO] ------------------------------------------------------------------------
+```
 
 ## TODOs:
 
