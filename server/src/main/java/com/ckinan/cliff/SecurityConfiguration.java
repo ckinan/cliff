@@ -1,6 +1,5 @@
 package com.ckinan.cliff;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -8,10 +7,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -23,13 +22,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         cupaf.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
         cupaf.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/login", "POST"));
         cupaf.setAuthenticationManager(authenticationManager());
+
+        final CorsConfiguration cc = new CorsConfiguration();
+        cc.setAllowedOrigins(Arrays.asList("http://localhost:7000"));
+        cc.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        cc.setAllowedHeaders(Collections.unmodifiableList(Collections.singletonList("*")));
+        cc.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource ubccs = new UrlBasedCorsConfigurationSource();
+        ubccs.registerCorsConfiguration("/**", cc);
+
         http
                 //.csrf().csrfTokenRepository(new CookieCsrfTokenRepository() | HttpSessionCsrfTokenRepository)
                 .addFilterBefore(
                         cupaf,
                         UsernamePasswordAuthenticationFilter.class)
                 .csrf().disable()
-                .cors()
+                .cors().configurationSource(ubccs)
                 .and()
                 .formLogin().disable()
                 .httpBasic().disable()
@@ -43,18 +51,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                 .and()
                 .logout().logoutUrl("/api/logout").logoutSuccessHandler(new CustomLogoutSuccessHandler());
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:7000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 
 }
