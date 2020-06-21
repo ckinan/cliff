@@ -24,7 +24,7 @@ Simple habit tracker.
 ## Using
 
 - ReactJS
-- Python 3.7
+- Java + Spring Boot
 - Postgres
 - Docker
 - Redis
