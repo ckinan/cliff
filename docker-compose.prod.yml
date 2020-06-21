@@ -66,8 +66,6 @@ services:
     depends_on:
       - redis-prod
       - postgres-prod
-    volumes:
-      - ./server-py:/opt/app
     environment:
       - REDIS_HOST=${REDIS_HOST_PROD}
       - REDIS_PORT=${REDIS_PORT}
