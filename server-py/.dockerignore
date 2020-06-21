@@ -1,5 +1,0 @@
-__pycache__
-.venv.
-.dockerignore
-Dockerfile
-run-host.sh

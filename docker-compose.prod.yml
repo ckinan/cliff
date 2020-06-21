@@ -56,27 +56,24 @@ services:
       - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL_CLIENT}
     stdin_open: true
     tty: true
-  server-py:
-    container_name: cliff-server-py-container-prod
+  server:
+    container_name: cliff-server-container-prod
     build:
-      context: ./server-py
-      dockerfile: Dockerfile.prod
+      context: ./server
+      dockerfile: Dockerfile
     ports:
-      - '7001:5000'
+      - '7001:8080'
     depends_on:
       - redis-prod
       - postgres-prod
-    volumes:
-      - ./server-py:/opt/app
     environment:
-      - FLASK_DEBUG=0
-      - FLASK_APP=/opt/app/src
-      - FLASK_ENV=production
-      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI_PROD}
-      - SECRET_KEY=${SECRET_KEY}
-      - SESSION_REDIS=${SESSION_REDIS_PROD}
+      - REDIS_HOST=${REDIS_HOST_PROD}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - DS_URL=${PGURL_PROD}
+      - DS_USER=${PGUSER}
+      - DS_PASSWORD=${PGPASSWORD}
       - CLIENT_URL=${CLIENT_URL_PROD}
-      - HOST_DOCKER_INTERNAL=host.docker.internal
       - VIRTUAL_HOST=${VIRTUAL_HOST_SERVER}
       - VIRTUAL_PORT=${VIRTUAL_PORT_SERVER}
       - LETSENCRYPT_HOST=${LETSENCRYPT_HOST_SERVER}
