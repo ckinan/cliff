@@ -1,5 +1,7 @@
-package com.ckinan.cliff;
+package com.ckinan.cliff.security;
 
+import com.ckinan.cliff.model.AccountEntity;
+import com.ckinan.cliff.model.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

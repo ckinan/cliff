@@ -1,4 +1,4 @@
-package com.ckinan.cliff;
+package com.ckinan.cliff.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;

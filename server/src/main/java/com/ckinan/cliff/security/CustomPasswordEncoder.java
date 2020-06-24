@@ -1,4 +1,4 @@
-package com.ckinan.cliff;
+package com.ckinan.cliff.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

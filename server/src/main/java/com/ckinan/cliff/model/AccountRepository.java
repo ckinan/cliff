@@ -1,4 +1,4 @@
-package com.ckinan.cliff;
+package com.ckinan.cliff.model;
 
 import org.springframework.data.repository.CrudRepository;
 

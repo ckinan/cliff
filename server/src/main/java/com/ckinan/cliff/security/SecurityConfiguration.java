@@ -1,4 +1,4 @@
-package com.ckinan.cliff;
+package com.ckinan.cliff.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

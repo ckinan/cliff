@@ -1,9 +1,9 @@
-package com.ckinan.cliff;
+package com.ckinan.cliff.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,21 +12,23 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+public class CustomAuthenticationFailureHandler
+        implements AuthenticationFailureHandler {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request,
-                                        HttpServletResponse response,
-                                        Authentication authentication)
+    public void onAuthenticationFailure(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            AuthenticationException exception)
             throws IOException, ServletException {
 
         response.addHeader("content-type", "application/json");
-        response.setStatus(HttpStatus.OK.value());
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         Map<String, Object> data = new HashMap<>();
-        data.put("isAuthenticated", true);
-        data.put("username", authentication.getName());
+        data.put("isAuthenticated", false);
+        data.put("exception", exception.getMessage());
 
         response.getOutputStream().println(objectMapper.writeValueAsString(data));
     }

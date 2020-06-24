@@ -1,4 +1,4 @@
-package com.ckinan.cliff;
+package com.ckinan.cliff.model;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
