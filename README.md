@@ -4,7 +4,7 @@ Simple habit tracker.
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ckinan_cliff&metric=alert_status)](https://sonarcloud.io/dashboard?id=ckinan_cliff)
 
-![](screenshot-0524.png)
+![](screenshot-0623.png)
 
 ## Features
 
@@ -24,7 +24,7 @@ Simple habit tracker.
 ## Using
 
 - ReactJS
-- Java + Spring Boot
+- Java 14 + Spring Boot
 - Postgres
 - Docker
 - Redis
