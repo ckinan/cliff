@@ -132,8 +132,9 @@ const Body: React.FC = () => {
 
   return (
     <div>
-      <div className="max-w-md mx-auto">
-        <div className="text-center">
+      <div className="flex flex-row max-w-md mx-auto">
+
+        <div className="flex flex-col text-center">
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-2 border-green-600"
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
@@ -160,78 +161,83 @@ const Body: React.FC = () => {
           </button>
         </div>
 
-        <div className="text-center">
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-3 border-solid border-2 border-green-600 text-xs"
-            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-              handlePagination(
-                  e,
-                  moment(startDate).subtract(1, 'weeks').format('YYYY-MM-DD'),
-                  moment(endDate).subtract(1, 'weeks').format('YYYY-MM-DD')
-              )
-            }
-          >
-            Previous Week
-          </button>
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 m-3 border-solid border-2 border-green-600 text-xs"
-            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
-              handlePagination(
-                  e,
-                  moment(startDate).add(1, 'weeks').format('YYYY-MM-DD'),
-                  moment(endDate).add(1, 'weeks').format('YYYY-MM-DD')
-              )
-            }
-          >
-            Next Week
-          </button>
-        </div>
-
-        <div className="text-center">
-          {
-            `From: ${startDate} To: ${endDate}`
-          }
-        </div>
-
-        <table className="border-collapse border-2 border-gray-500 text-xs mx-auto mt-3 mb-3">
+        <table className="border-collapse border-2 border-gray-500 text-xs mr-auto mt-3 mb-3 rounded-md">
           <thead>
-          <tr>
-            <th className="border border-gray-400 w-8 px-4 bg-gray-200">-</th>
-            <th className="border border-gray-400 w-8 bg-gray-200">Mo</th>
-            <th className="border border-gray-400 w-8 bg-gray-200">Tu</th>
-            <th className="border border-gray-400 w-8 bg-gray-200">We</th>
-            <th className="border border-gray-400 w-8 bg-gray-200">Th</th>
-            <th className="border border-gray-400 w-8 bg-gray-200">Fr</th>
-            <th className="border border-gray-400 w-8 bg-gray-200">Sa</th>
-            <th className="border border-gray-400 w-8 bg-gray-200">Su</th>
-          </tr>
+            <tr>
+              <th colSpan={8} className="border border-gray-400 px-4 bg-gray-200">{
+                `From: ${startDate} To: ${endDate}`
+              }</th>
+            </tr>
+            <tr>
+              <th className="border border-gray-400 w-8 px-4 bg-gray-200">-</th>
+              <th className="border border-gray-400 w-8 bg-gray-200">Mo</th>
+              <th className="border border-gray-400 w-8 bg-gray-200">Tu</th>
+              <th className="border border-gray-400 w-8 bg-gray-200">We</th>
+              <th className="border border-gray-400 w-8 bg-gray-200">Th</th>
+              <th className="border border-gray-400 w-8 bg-gray-200">Fr</th>
+              <th className="border border-gray-400 w-8 bg-gray-200">Sa</th>
+              <th className="border border-gray-400 w-8 bg-gray-200">Su</th>
+            </tr>
           </thead>
           <tbody>
-          {report.map((record: any, index: number) => {
-            return (
-              <tr key={index}>
-                <td className="border border-gray-400 text-center bg-gray-200">{index}:00</td>
-                {getRecord(record[0])}
-                {getRecord(record[1])}
-                {getRecord(record[2])}
-                {getRecord(record[3])}
-                {getRecord(record[4])}
-                {getRecord(record[5])}
-                {getRecord(record[6])}
-              </tr>
-            );
-          })}
-          <tr>
-            <td className="border border-gray-400 text-center bg-gray-200">-</td>
-            {reportSummary.map((record: any, index: number) => {
+            {report.map((record: any, index: number) => {
               return (
-                  <td className="border border-gray-400 text-center bg-gray-200" key={index}>{record.toFixed(2)}</td>
+                  <tr key={index}>
+                    <td className="border border-gray-400 text-center bg-gray-200">{index}:00</td>
+                    {getRecord(record[0])}
+                    {getRecord(record[1])}
+                    {getRecord(record[2])}
+                    {getRecord(record[3])}
+                    {getRecord(record[4])}
+                    {getRecord(record[5])}
+                    {getRecord(record[6])}
+                  </tr>
               );
             })}
-          </tr>
-
+            <tr>
+              <td className="border border-gray-400 text-center bg-gray-200">-</td>
+              {reportSummary.map((record: any, index: number) => {
+                return (
+                    <td className="border border-gray-400 text-center bg-gray-200" key={index}>{record.toFixed(2)}</td>
+                );
+              })}
+            </tr>
           </tbody>
+
+          <tfoot>
+            <tr>
+              <td colSpan={8}>
+                <div className="flex flex-row items-stretch justify-between text-center">
+                  <button
+                      className="flex-1 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-4 border-solid border-2 border-green-600 text-xs mr-1 rounded-md"
+                      onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                          handlePagination(
+                              e,
+                              moment(startDate).subtract(1, 'weeks').format('YYYY-MM-DD'),
+                              moment(endDate).subtract(1, 'weeks').format('YYYY-MM-DD')
+                          )
+                      }
+                  >
+                    {"<"}
+                  </button>
+                  <button
+                      className="flex-1 bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-4 border-solid border-2 border-green-600 text-xs ml-1 rounded-md"
+                      onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                          handlePagination(
+                              e,
+                              moment(startDate).add(1, 'weeks').format('YYYY-MM-DD'),
+                              moment(endDate).add(1, 'weeks').format('YYYY-MM-DD')
+                          )
+                      }
+                  >
+                    {">"}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tfoot>
         </table>
+
       </div>
     </div>
   );
