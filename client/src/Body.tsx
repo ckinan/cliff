@@ -7,6 +7,8 @@ const Body: React.FC = () => {
   const [reportSummary, setReportSummary] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [weekSum, setWeekSum] = useState(0);
+  const [isThisWeek, setIsThisWeek] = useState(false);
 
   const handlePagination = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
                             startDate: string,
@@ -18,6 +20,14 @@ const Body: React.FC = () => {
   const fetchTracks = async (startDate: string, endDate: string) => {
     setStartDate(startDate);
     setEndDate(endDate);
+
+    const startDateComp = moment(startDate);
+    const endDateComp = moment(endDate);
+    const now = moment();
+
+    setIsThisWeek(now > startDateComp && now < endDateComp);
+
+    console.log(`${startDate}-${endDate}`);
 
     const headers: HeadersInit = new Headers();
     headers.set('Access-Control-Allow-Credentials', 'true');
@@ -63,15 +73,18 @@ const Body: React.FC = () => {
       [0,0,0,0,0,0,0],
     ];
     let tmpReportSummary:any = [0,0,0,0,0,0,0];
+    let tmpReportWeek:number = 0;
 
     for(let track of response.tracks) {
       tmpReport[moment(track.date).local().hour()][moment(track.date).local().isoWeekday()-1] = track.counter;
       tmpReportSummary[moment(track.date).local().isoWeekday()-1] += track.counter;
+      tmpReportWeek += track.counter;
     }
 
     setTracks(response.tracks);
     setReport(tmpReport);
     setReportSummary(tmpReportSummary);
+    setWeekSum(Math.round(tmpReportWeek * 100) / 100);
   };
 
   useEffect(() => {
@@ -112,10 +125,15 @@ const Body: React.FC = () => {
       });
   };
 
-  const getRecord = (track: number) => {
+  const getRecord = (record: Array<number>, day: number, hour: number) => {
+    const track = record[day];
+    const currentDay = moment().isoWeekday() - 1;
+    const currentHour = moment().hours();
     return (
         <>
-          {track === 0 ? (
+          {(currentDay === day && currentHour === hour && isThisWeek) ? (
+              <td className="border border-gray-400 text-center bg-yellow-400">{track}</td>
+          ) : track === 0 ? (
               <td className="border border-gray-400 text-center">{track}</td>
           ) : (track > 0 && track <= 0.2) ? (
               <td className="border border-gray-400 text-center bg-green-200">{track}</td>
@@ -134,9 +152,9 @@ const Body: React.FC = () => {
     <div>
       <div className="flex flex-row max-w-md mx-auto">
 
-        <div className="flex flex-col text-center">
+        <div className="flex flex-col text-center mx-2">
           <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-2 border-green-600"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold rounded-full h-16 w-16 my-3 border-solid border-2 border-green-600"
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
               handleAdd(e, 0.2)
             }
@@ -144,7 +162,7 @@ const Body: React.FC = () => {
             1/5
           </button>
           <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-2 border-green-600"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold rounded-full h-16 w-16 my-3 border-solid border-2 border-green-600"
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
               handleAdd(e, 0.5)
             }
@@ -152,7 +170,7 @@ const Body: React.FC = () => {
             1/2
           </button>
           <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full h-16 w-16 m-3 border-solid border-2 border-green-600"
+            className="bg-green-500 hover:bg-green-700 text-white font-bold rounded-full h-16 w-16 my-3 border-solid border-2 border-green-600"
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
               handleAdd(e, 1)
             }
@@ -161,7 +179,7 @@ const Body: React.FC = () => {
           </button>
         </div>
 
-        <table className="border-collapse border-2 border-gray-500 text-xs mr-auto mt-3 mb-3 rounded-md">
+        <table className="border-collapse border-2 border-gray-500 text-xs mt-3 mb-3 rounded-md">
           <thead>
             <tr>
               <th colSpan={8} className="border border-gray-400 px-4 bg-gray-200">{
@@ -184,13 +202,13 @@ const Body: React.FC = () => {
               return (
                   <tr key={index}>
                     <td className="border border-gray-400 text-center bg-gray-200">{index}:00</td>
-                    {getRecord(record[0])}
-                    {getRecord(record[1])}
-                    {getRecord(record[2])}
-                    {getRecord(record[3])}
-                    {getRecord(record[4])}
-                    {getRecord(record[5])}
-                    {getRecord(record[6])}
+                    {getRecord(record, 0, index)}
+                    {getRecord(record, 1, index)}
+                    {getRecord(record, 2, index)}
+                    {getRecord(record, 3, index)}
+                    {getRecord(record, 4, index)}
+                    {getRecord(record, 5, index)}
+                    {getRecord(record, 6, index)}
                   </tr>
               );
             })}
@@ -237,6 +255,11 @@ const Body: React.FC = () => {
             </tr>
           </tfoot>
         </table>
+
+        <div className="flex flex-col text-center my-3 leading-none w-16 ml-2">
+          <div className="text-3xl">{weekSum}</div>
+          <div className="text-sm text-gray-700">Total</div>
+        </div>
 
       </div>
     </div>
