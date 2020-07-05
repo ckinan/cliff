@@ -25,7 +25,7 @@ const Body: React.FC = () => {
     const endDateComp = moment(endDate);
     const now = moment();
 
-    setIsThisWeek(now > startDateComp && now < endDateComp);
+    setIsThisWeek(now.isSameOrAfter(startDateComp, "day") && now.isSameOrBefore(endDateComp, "day"));
 
     console.log(`${startDate}-${endDate}`);
 
