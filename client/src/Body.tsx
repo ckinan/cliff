@@ -156,6 +156,14 @@ const Body: React.FC = () => {
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold rounded-full h-16 w-16 my-3 border-solid border-2 border-green-600"
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                handleAdd(e, 0.1)
+            }
+          >
+            1/10
+          </button>
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white font-bold rounded-full h-16 w-16 my-3 border-solid border-2 border-green-600"
+            onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
               handleAdd(e, 0.2)
             }
           >
