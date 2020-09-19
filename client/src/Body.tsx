@@ -76,8 +76,8 @@ const Body: React.FC = () => {
     let tmpReportWeek:number = 0;
 
     for(let track of response.tracks) {
-      tmpReport[moment(track.date).utc(false).hour()][moment(track.date).utc(false).isoWeekday()-1] = track.counter;
-      tmpReportSummary[moment(track.date).utc(false).isoWeekday()-1] += track.counter;
+      tmpReport[moment(track.date).local().hour()][moment(track.date).local().isoWeekday()-1] = track.counter;
+      tmpReportSummary[moment(track.date).local().isoWeekday()-1] += track.counter;
       tmpReportWeek += track.counter;
     }
 
