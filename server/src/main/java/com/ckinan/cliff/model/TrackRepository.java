@@ -20,4 +20,10 @@ public interface TrackRepository extends JpaRepository<TrackEntity, Long> {
             nativeQuery=true)
     List<Map<String, Object>> findTracksByCreatedAtDateRange(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
+    @Query(value="select * from track\n" +
+            "where createdat\\:\\:date >= to_date(:startDate,'YYYY-MM-DD')\n" +
+            "and createdat\\:\\:date <= to_date(:endDate,'YYYY-MM-DD')",
+            nativeQuery=true)
+    List<Map<String, Object>> findTracksByCreatedAt(@Param("startDate") String startDate, @Param("endDate") String endDate);
+
 }

@@ -23,8 +23,15 @@ public class TrackController {
                 trackRepository.findTracksByCreatedAtDateRange(
                         startDate,
                         endDate);
+
+        List<Map<String, Object>> rawTracks =
+                trackRepository.findTracksByCreatedAt(
+                        startDate,
+                        endDate);
+
         Map<String,Object> model = new HashMap<>();
         model.put("tracks", tracks);
+        model.put("rawTracks", rawTracks);
         model.put("startDate", startDate);
         model.put("endDate", endDate);
         return model;
