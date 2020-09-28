@@ -3,12 +3,36 @@ import moment from 'moment';
 
 const Body: React.FC = () => {
   const [tracks, setTracks] = useState<Array<any>>([]);
+  const [rawTracks, setRawTracks] = useState<Array<any>>([]);
   const [report, setReport] = useState([]);
   const [reportSummary, setReportSummary] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [weekSum, setWeekSum] = useState(0);
   const [isThisWeek, setIsThisWeek] = useState(false);
+
+  const deleteTrack = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+                            trackId: any) => {
+    e.preventDefault();
+
+    const headers: HeadersInit = new Headers();
+    headers.set('Content-Type', 'application/json');
+    headers.set('Access-Control-Allow-Credentials', 'true');
+
+    const params: RequestInit = {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: headers
+    };
+
+    fetch(`${process.env.REACT_APP_SERVER_URL}/api/track/${trackId}`, params)
+        .then((response) => {
+          return response.json();
+        })
+        .then(() => {
+          fetchTracks(startDate, endDate);
+        });
+  };
 
   const handlePagination = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
                             startDate: string,
@@ -82,6 +106,7 @@ const Body: React.FC = () => {
     }
 
     setTracks(response.tracks);
+    setRawTracks(response.rawTracks);
     setReport(tmpReport);
     setReportSummary(tmpReportSummary);
     setWeekSum(Math.round(tmpReportWeek * 100) / 100);
@@ -270,6 +295,30 @@ const Body: React.FC = () => {
         </div>
 
       </div>
+
+      <div className="max-w-md mx-auto mb-4">
+        {rawTracks.slice(0).reverse().map((record: any, index: number) => {
+          return (
+              <div className="my-2 ml-2" key={index}>
+                <button
+                    className="flex-1 bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 border-solid border-2 border-red-600 text-xs ml-1 rounded-md"
+                    onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) =>
+                        deleteTrack(
+                            e,
+                            record.id
+                        )
+                    }
+                >
+                  {"x"}
+                </button>
+                <span className="ml-2">
+                  {record.id} - {moment(record.createdat).local().format("dddd HH:mmA")} - {record.counter}
+                </span>
+              </div>
+          );
+        })}
+      </div>
+
     </div>
   );
 };

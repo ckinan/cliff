@@ -48,4 +48,12 @@ public class TrackController {
         return model;
     }
 
+    @RequestMapping(value = "/track/{trackId}", method = RequestMethod.DELETE)
+    public Map<String,Object> deleteTrack(@PathVariable Long trackId) {
+        trackRepository.deleteById(trackId);
+        Map<String,Object> model = new HashMap<>();
+        model.put("status", "OK");
+        return model;
+    }
+
 }

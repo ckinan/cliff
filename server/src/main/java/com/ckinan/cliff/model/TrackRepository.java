@@ -22,7 +22,8 @@ public interface TrackRepository extends JpaRepository<TrackEntity, Long> {
 
     @Query(value="select * from track\n" +
             "where createdat\\:\\:date >= to_date(:startDate,'YYYY-MM-DD')\n" +
-            "and createdat\\:\\:date <= to_date(:endDate,'YYYY-MM-DD')",
+            "and createdat\\:\\:date <= to_date(:endDate,'YYYY-MM-DD')\n" +
+            "order by createdat asc",
             nativeQuery=true)
     List<Map<String, Object>> findTracksByCreatedAt(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
